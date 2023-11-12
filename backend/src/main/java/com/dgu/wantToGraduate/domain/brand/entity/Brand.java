@@ -1,26 +1,26 @@
 package com.dgu.wantToGraduate.domain.brand.entity;
 
-import com.dgu.wantToGraduate.domain.category.BrandType;
+import com.dgu.wantToGraduate.domain.category.BrandCategory;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Brand {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "brand_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name= "brand_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @OneToMany(mappedBy = "brand")
+    private List<Menu> menus=new ArrayList<>();
 
-    @Column(nullable = true)
-    private String grade;
-
-    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private BrandType type;
+    private String brandName;
+
+    @Enumerated(value=EnumType.STRING)
+    @Column(nullable = false)
+    private BrandCategory brandCategory;
 }
