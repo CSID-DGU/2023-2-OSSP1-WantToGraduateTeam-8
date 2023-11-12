@@ -1,6 +1,7 @@
 package com.dgu.wantToGraduate.domain.brand.entity;
 
 import com.dgu.wantToGraduate.domain.category.BrandCategory;
+import com.dgu.wantToGraduate.domain.matching.entity.WaitingRoom;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,4 +24,8 @@ public class Brand {
     @Enumerated(value=EnumType.STRING)
     @Column(nullable = false)
     private BrandCategory brandCategory;
+
+    @OneToOne
+    @JoinColumn(name = "WaitingRoom_id")
+    private WaitingRoom waitingRoom;
 }
