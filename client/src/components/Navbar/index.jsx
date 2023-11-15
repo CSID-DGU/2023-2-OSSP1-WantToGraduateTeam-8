@@ -41,6 +41,7 @@ const NavbarContainer = styled.div`
   height: 10rem;
   align-items: center;
   justify-content: center;
+  // background-color: #E2492F;
   margin: 0 11rem;
   gap: 3.2rem;
 
