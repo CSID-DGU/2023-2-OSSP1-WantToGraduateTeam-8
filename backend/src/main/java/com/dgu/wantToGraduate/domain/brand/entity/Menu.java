@@ -11,7 +11,7 @@ public class Menu {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "Brand_Id")
+    @JoinColumn(name = "brand_Id")
     private Brand brand;
 
     @Column(nullable = false)

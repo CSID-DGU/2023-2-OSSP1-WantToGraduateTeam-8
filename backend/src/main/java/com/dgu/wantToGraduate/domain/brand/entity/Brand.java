@@ -1,13 +1,20 @@
 package com.dgu.wantToGraduate.domain.brand.entity;
 
 import com.dgu.wantToGraduate.domain.category.BrandCategory;
-import com.dgu.wantToGraduate.domain.matching.entity.WaitingRoom;
+import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class Brand {
 
     @Id
@@ -16,16 +23,25 @@ public class Brand {
     private Long id;
 
     @OneToMany(mappedBy = "brand")
-    private List<Menu> menus=new ArrayList<>();
+    @Column(nullable = true)
+    private List<Menu> menu=new ArrayList<>();
 
     @Column(nullable = false)
     private String brandName;
 
     @Enumerated(value=EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BrandCategory brandCategory;
 
-    @OneToOne
-    @JoinColumn(name = "WaitingRoom_id")
-    private WaitingRoom waitingRoom;
+    @ManyToOne
+    @JoinColumn(name="preferBrand_id")
+    private PreferBrand preferBrand;
+
+    @Builder
+    public Brand(String brandName, BrandCategory brandCategory){
+        this.brandName=brandName;
+        this.brandCategory=brandCategory;
+    }
+
+
 }
