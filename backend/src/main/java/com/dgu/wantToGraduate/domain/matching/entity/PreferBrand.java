@@ -30,12 +30,9 @@ public class PreferBrand extends BaseTimeEntity {
     private User user;
 
     //1L [{1순위,BBQ}, mdasf,sdfisdg]
+    // key : value = 순위 : 브랜드ID
     @OneToMany(mappedBy = "preferBrand")
     private Set<Brand> brandList = new HashSet<>();
-
-    /*브랜드 선호도 int 값은 어디에 들어가야하지?*/
-    @Column(nullable = false)
-    private int rank;
 }
 /*
 1. 사용자가 원하는 매장 1,2,3 선택
