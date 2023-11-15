@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class PreferBrand extends BaseTimeEntity {
 
     //1L [{1순위,BBQ}, mdasf,sdfisdg]
     @OneToMany(mappedBy = "preferBrand")
-    private HashSet<Brand> brandList = new HashSet<>();
+    private Set<Brand> brandList = new HashSet<>();
 
     /*브랜드 선호도 int 값은 어디에 들어가야하지?*/
     @Column(nullable = false)
