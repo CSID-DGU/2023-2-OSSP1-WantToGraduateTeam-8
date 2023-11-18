@@ -1,9 +1,11 @@
 package com.dgu.wantToGraduate.domain.chat.entity;
 
+import com.dgu.wantToGraduate.domain.BaseTimeEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class ChatMessage {
+public class ChatMessage extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
