@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class User {
+public class User extends BaseTimeEntity{
 
     // 필수 데이터
     // 닉네임, 프로필사진, 계좌번호, 이메일, 비밀번호, 평점

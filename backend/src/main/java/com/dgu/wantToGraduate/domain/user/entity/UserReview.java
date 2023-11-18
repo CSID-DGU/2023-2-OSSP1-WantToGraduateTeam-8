@@ -1,9 +1,11 @@
 package com.dgu.wantToGraduate.domain.user.entity;
 
+import com.dgu.wantToGraduate.domain.BaseTimeEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class UserReview {
+public class UserReview extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
