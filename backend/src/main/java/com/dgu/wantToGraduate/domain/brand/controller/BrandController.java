@@ -17,10 +17,16 @@ import org.springframework.web.bind.annotation.*;
 public class BrandController {
 
     private final BrandService brandService;
-    @GetMapping("/list")
+    @GetMapping("/list/all")
     public ResponseEntity<?> getBrandList(@RequestParam("category") String category){
 
         return ResponseEntity.ok(brandService.searchAll(category));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getBrand(@RequestParam("search") String brandName){
+
+        return ResponseEntity.ok(brandService.search(brandName));
     }
 
 }
