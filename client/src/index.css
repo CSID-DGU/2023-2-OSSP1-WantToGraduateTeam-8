@@ -52,7 +52,13 @@ body {
   height: 100%;
 
 }
-
+@font-face {
+	font-family: 'Pretendard';
+	src: url('../src/assets/fonts/Pretendard-Bold.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+  }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
