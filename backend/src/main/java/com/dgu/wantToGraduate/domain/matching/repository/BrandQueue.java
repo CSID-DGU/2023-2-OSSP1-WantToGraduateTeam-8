@@ -1,6 +1,8 @@
 package com.dgu.wantToGraduate.domain.matching.repository;
 
 import com.dgu.wantToGraduate.domain.brand.entity.Brand;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.ResponseDto;
 import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
@@ -9,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Optional;
-import java.util.SortedSet;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
@@ -23,26 +22,44 @@ import java.util.stream.Collectors;
 public class BrandQueue {
 
         private final UserRepository userRepository;
-
         private static ConcurrentSkipListSet<Brand> brandQueue = new ConcurrentSkipListSet<>();
-
         private static ConcurrentHashMap<Long, ConcurrentSkipListSet<User>> storeUsers = new ConcurrentHashMap<>();
 
         public void addBrand(Brand brand){
-            this.storeUsers.putIfAbsent(brand.getId(), new ConcurrentSkipListSet<>(sortUserBy(brand.getId()))); //같은 키값에 해당하는 value이면 no action( 다중 스레드 환경에서 동일 값 삽입 방지 )
-
+            this.storeUsers.putIfAbsent(brand.getId(), new ConcurrentSkipListSet<>(sortUserBy(brand.getId())));
         }
+        public ResponseDto addUser(Long userId, Long brandId) {
 
-        //TODO: 매장 대기열에 유저 정렬기준 세워 넣는 작업 필요
-        public void addUser(Long userId, Long brandId) {
+            Optional<User> userEntity = userRepository.findById(userId);
+            if(!userEntity.isPresent()){
+                throw new IllegalArgumentException("[예외발생] 존재하지 않는 유저입니다.");
+            }
+            storeUsers.get(brandId).add(userEntity.get());
+//            userRepository.findById(userId).ifPresent(user -> {
+//                storeUsers.get(brandId).add(user);
+//            });
+            showBrandQueue(); //TEST: 추가될 때마다 storeUsers 내용 확인( before match)
 
-            userRepository.findById(userId).ifPresent(user -> {
-                storeUsers.get(brandId).add(user);
-            });
-
-
-            //TEST: 추가될 때마다 storeUsers 내용 확인
-            showBrandQueue();
+            /**
+             * 매장 대기열에 유저 삽입 후, 매칭 성공 여부 확인
+             * 성공 : 매칭된 유저들 반환 + 매칭된 유저들 모든 대기열에서 삭제
+             * 실패 : 빈 리스트 반환
+             */
+            List<User> matchedUsers = executeMatching(brandId);
+            log.info("[###########] matchedUsers: {}", matchedUsers);
+            if(matchedUsers!=null){
+                ResponseDto matchingResult = ResponseDto.builder()
+                        .brandId(brandId)
+                        .matchList(matchedUsers.stream()
+                                .map(user -> ResponseDto.MatchDto.builder()
+                                        .nickname(user.getNickname())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .build();
+                log.info("[###########] matchingResult: {}", matchingResult);
+                return matchingResult;
+            }
+            return null;
         }
 
 
@@ -73,6 +90,24 @@ public class BrandQueue {
                     .findFirst();
             return preferBrandOpt.map(PreferBrand::getCreateAt).orElseThrow(()
                     -> new IllegalArgumentException("[예외발생] 타임스탬프 정보가 없습니다."));
+    }
+
+    private List<User> executeMatching(Long brandId){
+        if(storeUsers.get(brandId).size() >= 3){
+            log.info("{}매장에서 매칭 성공", brandId);
+            //TODO: 매칭 성공한 유저들 반환
+            List<User> matchedUsers = storeUsers.get(brandId).stream()
+                    .limit(3)
+                    .collect(Collectors.toList());
+            //모든 매장의 대기열에서 매칭된 유저들 제거
+            storeUsers.forEach((key, value) -> {
+                value.removeAll(matchedUsers);
+            });
+            log.info("[executeMatching] matchedUsers: {}", matchedUsers);
+            return matchedUsers;
+        }else{
+            return null;
+        }
     }
 
     private void showBrandQueue(){

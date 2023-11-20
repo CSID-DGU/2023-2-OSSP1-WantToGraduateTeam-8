@@ -23,10 +23,14 @@ public class MatchingDto {
 
     @AllArgsConstructor
     @Builder
+    @Getter
     public static class ResponseDto{
-        private String brandName;
+        private Long brandId;
         private List<MatchDto> matchList;
 
+        @Builder
+        @AllArgsConstructor
+        @Getter
         public static class MatchDto{
             private String nickname;
         }

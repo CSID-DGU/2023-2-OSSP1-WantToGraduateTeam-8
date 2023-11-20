@@ -28,9 +28,10 @@ public class MatchingService {
     private final BrandRepository brandRepository;
     private final PreferBrandRepository preferBrandRepository;
 
-    public void matching(RequestDto selectInfo){
+    public MatchingDto.ResponseDto matching(RequestDto selectInfo){
+        MatchingDto.ResponseDto matchingResult = null;
+
         log.info("[MatchingService] 진입");
-        // PreferBrand saving 작업 필요 (; insertIntoBrandQueue()에서 정렬 기준으로써 저장된 데이터 사용)
         User userEntity = userRepository.findById(selectInfo.getUserId()).orElseThrow(()
                 -> new IllegalArgumentException("[예외발생]존재하지 않는 유저입니다."));
         log.info("[MatchingService] userEntity: {}", userEntity);
@@ -40,7 +41,6 @@ public class MatchingService {
         Map<Integer,Brand> brandList = new HashMap();
         /*매장 대기열 생성*/
         for(SelectDto selectDto : selectInfo.getPreferBrandList()){
-            //TODO: 3개의 선호 정보 모두 저장하고 매칭이 시작되어야해. 이것 때문에 postman에서 요청을 3번째로 해야 정상으로api가200을 리턴함.
             log.info("[MatchingService] selectDto: {}", selectDto);
             PreferBrand build = PreferBrand.builder()
                     .user(userEntity)
@@ -50,12 +50,18 @@ public class MatchingService {
             log.info("[MatchingService] build: {}", build);
             preferBrandRepository.save(build);
         }
+
         for(SelectDto selectDto : selectInfo.getPreferBrandList()){
             generateBrandQueue(selectDto); // 매장 큐 생성
             log.info("[MatchingService] brandQueue: {}", brandQueue);
-            insertIntoBrandQueue(selectDto,selectInfo.getUserId()); // 매장 큐에 유저 삽입
+            matchingResult = insertIntoBrandQueue(selectDto, selectInfo.getUserId());// 매장 큐에 유저 삽입
+            if(matchingResult != null){
+                break;
+            }
             log.info("[MatchingService] brandQueue: {}", brandQueue);
         }
+        log.info("[@최종반환값@] matchingResult: {}", matchingResult);
+        return matchingResult;
     }
 //    //TODO: 네이밍 다시 해야할듯?
 //    public Map<Integer,Brand>  of(SelectDto selectDto, Map<Integer,Brand> brandList){
@@ -68,11 +74,13 @@ public class MatchingService {
 //        return brandList;
 //    }
 
-    private void insertIntoBrandQueue(SelectDto selectDto, Long userId) {
+    private MatchingDto.ResponseDto insertIntoBrandQueue(SelectDto selectDto, Long userId) {
         log.info("[MatchingService] insertIntoBrandQueue 진입");
         Long brandId = brandRepository.findBrandIdByBrandName(selectDto.getBrandName())
                 .orElseThrow(() -> new IllegalArgumentException("[예외발생]해당 브랜드가 없습니다."));
-        brandQueue.addUser(userId, brandId);
+        MatchingDto.ResponseDto matchingResult = brandQueue.addUser(userId, brandId);
+        log.info("[MatchingService] matchingResult: {}", matchingResult);
+        return matchingResult;
     }
 
     private void generateBrandQueue(SelectDto brand){
