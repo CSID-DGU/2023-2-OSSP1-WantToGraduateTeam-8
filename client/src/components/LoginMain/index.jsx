@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from "react";
 import {ReactComponent as Delishare} from '../../assets/imgs/Login_logo.svg'
-
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
@@ -37,16 +36,16 @@ export default function LoginMain() {
             <MiddleLogo>Share,<br/> Delicious</MiddleLogo>
             </Logo2>
             <LoginWrapper>
-              <NavLink to='/login'>
+              <StyledLink to='/login'>
               <LoginButton>
-                <p>로그인</p>
+              <p>로그인</p>
               </LoginButton>
-              </NavLink>
-              <NavLink to='/signup'>
+              </StyledLink>
+              <StyledLink to='/signup'>
               <SignupButton>
                 <p>회원가입</p>
               </SignupButton>
-              </NavLink>
+            </StyledLink>
        
             </LoginWrapper>
         
@@ -153,6 +152,9 @@ p{
   font-weight: 400;
   line-height: 100%; 
 }
+&:hover {
+  background: #EDE493; /* 클릭 배경색 변경 */
+}
 
 `
 
@@ -179,10 +181,16 @@ p{
   height: 1.36113rem;
   flex-shrink: 0;
   color: #040404;
-  font-feature-settings: 'clig' off, 'liga' off;
   font-size: 1.5rem;
   font-style: normal;
   font-weight: 400;
   line-height: 100%; 
 }
+&:hover {
+  background: #EDE493; /* 클릭 배경색 변경 */
+}
 `
+
+const StyledLink = styled(Link)`
+  text-decoration: none; /* 밑줄 제거 */
+`;
