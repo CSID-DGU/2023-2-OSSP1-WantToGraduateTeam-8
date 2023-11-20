@@ -29,13 +29,13 @@ export const Mobile = ({ children }) => {
     const navigate = useNavigate();
   
     const handleLogin = () => {
-      const correctUsername = 'abcd'; // 실제 아이디
-      const correctPassword = '1234'; // 실제 비밀번호
+      const correctUsername = 'abcd'; // 임시 아이디
+      const correctPassword = '1234'; // 임시 비밀번호
   
       if (username === correctUsername && password === correctPassword) {
-        login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경합니다.
+        login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경.
   
-        // 로그인 성공 시 MainPage로 이동합니다.
+        // 로그인 성공 시 MainPage로 이동.
         navigate('/main');
       } else {
         alert('아이디 혹은 비밀번호가 틀립니다.');
