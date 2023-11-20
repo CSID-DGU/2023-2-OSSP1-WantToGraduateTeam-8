@@ -4,6 +4,7 @@ import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 import com.dgu.wantToGraduate.domain.chat.entity.ChatRoom;
 import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class User extends BaseTimeEntity{
 
     // 필수 데이터

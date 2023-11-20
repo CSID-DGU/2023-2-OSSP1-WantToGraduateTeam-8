@@ -33,9 +33,11 @@ public class Brand {
     @Column(nullable = true)
     private BrandCategory brandCategory;
 
-    @ManyToOne
-    @JoinColumn(name="preferBrand_id")
-    private PreferBrand preferBrand;
+    @OneToMany(mappedBy = "brand")
+    private List<PreferBrand> preferBrandList=new ArrayList<>();
+//    @ManyToOne
+//    @JoinColumn(name="preferBrand_id")
+//    private PreferBrand preferBrand;
 
     @Builder
     public Brand(String brandName, BrandCategory brandCategory){

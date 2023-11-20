@@ -9,15 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class PreferBrand extends BaseTimeEntity {
 
     @Id
@@ -29,10 +27,19 @@ public class PreferBrand extends BaseTimeEntity {
     @JoinColumn(name="user_id")
     private User user;
 
-    //1L [{1순위,BBQ}, mdasf,sdfisdg]
-    // key : value = 순위 : 브랜드ID
-    @OneToMany(mappedBy = "preferBrand")
-    private Set<Brand> brandList = new HashSet<>();
+    @Column
+    private int priority;
+
+    //TODO: 브랜드가 Many가 아니네... 선호테이블이 Many네 이거 바꿔야해(주현이하고 공유)
+    // 왜? 선호테이블은 유저가 여러개의 브랜드를 선호할 수 있으니까
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+
+//    //1L [{1순위,BBQ}, mdasf,sdfisdg]
+//    // key : value = 순위 : 브랜드ID
+//    @OneToMany(mappedBy = "preferBrand")
+//    private List<Brand> brandList = new HashMap<>();
 }
 /*
 1. 사용자가 원하는 매장 1,2,3 선택
