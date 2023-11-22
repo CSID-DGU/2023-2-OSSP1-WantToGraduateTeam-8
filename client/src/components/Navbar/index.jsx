@@ -82,7 +82,7 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-
+`
 
 
 const MobileWrapper = styled.div`
@@ -192,6 +192,3 @@ align-items: center;
 flex-shrink: 0;
 
 `
-
-
-

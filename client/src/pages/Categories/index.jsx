@@ -4,17 +4,6 @@ import {ReactComponent as Delishare} from '../../assets/imgs/Login_logo.svg'
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
-import Cafe from '../../assets/imgs/Cafe.png'
-import Chinese from '../../assets/imgs/Chinese.png'
-import Pizza from '../../assets/imgs/Pizza.png'
-import Bakery from '../../assets/imgs/Bakery.png'
-import Chicken from '../../assets/imgs/Chicken.png'
-import Sushi from '../../assets/imgs/Sushi.png'
-import Korean from '../../assets/imgs/Korean.png'
-import Fusion from '../../assets/imgs/Fusion.png'
-import Fastfood from '../../assets/imgs/Hamburger.png'
-import Bunsik from '../../assets/imgs/Bunsik.png'
-import Nightfood from '../../assets/imgs/NightFood.png'
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -30,51 +19,23 @@ export const Mobile = ({ children }) => {
     return <>{isPc && children}</>
   }
 
-  function groupCategories(categories) {
-    const grouped = [];
-    for (let i = 0; i < categories.length; i += 2) {
-      grouped.push(categories.slice(i, i + 2));
-    }
-    return grouped;
-  }
+//   function groupCategories(categories) {
+//     const grouped = [];
+//     for (let i = 0; i < categories.length; i += 2) {
+//       grouped.push(categories.slice(i, i + 2));
+//     }
+//     return grouped;
+//   }
 
 export default function MainPage() {
-  const categories = [
-    { name: '카페', image: Cafe },
-    { name: '양식', image: Pizza },
-    { name: '중식', image: Chinese },
-    { name: '베이커리', image: Bakery },
-    { name: '닭/오리요리', image: Chicken },
-    { name: '일식/수산물', image: Sushi },
-    { name: '한식', image: Korean },
-    { name: '퓨전요리', image: Fusion },
-    { name: '패스트푸드', image: Fastfood },
-    { name: '분식', image: Bunsik },
-    { name: '술안주', image: Nightfood },
-    
-  ];
+
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   return (
    <>
         <Mobile>
           <MobileContainer>
           <MobileWrapper>
-          <CategoriesContainer>
-              {groupCategories(categories).map((group, index) => (
-                <MenuGroup key={index}>
-                  {group.map((category, idx) => (
-                    <Menu key={idx}>
-                      {/* <Link to={`/category/${category.name}`}> */}
-                      <Link to="category">
-                        <b>{category.name}</b>
-                        <img src={category.image} alt={category.name} />
-                      </Link>
-                      {/* </Link> */}
-                    </Menu>
-                  ))}
-                </MenuGroup>
-              ))}
-            </CategoriesContainer>
+            각 카테고리 페이지입니다.
           </MobileWrapper>
           </MobileContainer>
 
