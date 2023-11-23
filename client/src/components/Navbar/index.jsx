@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useState } from "react";
- import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
+import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
