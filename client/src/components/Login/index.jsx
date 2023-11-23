@@ -163,7 +163,7 @@ text-align: center;
 font-size: 1.09375rem;
 font-style: bold;
 font-weight: 800;
-line-height: 100%; /* 1.09375rem */
+line-height: 100%; 
 
   }
   &:hover {

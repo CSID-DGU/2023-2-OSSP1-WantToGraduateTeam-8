@@ -10,7 +10,7 @@ import Signup from "./components/Signup/index"
 import Navbar from './components/Navbar';
 import MainPage from './pages/MainPage/index'
 import { AuthProvider } from './components/Login/AuthContext'; // 경로는 실제 구조에 맞게 조정
-import Category from './pages/Categories/index'
+import Brand from './pages/Brand/index'
 
 const router = createBrowserRouter([
   { path: "/", element: <LoginMain /> },
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   { path: "/main", element: <App />, children: [
     // App 컴포넌트 내에서 처리할 추가적인 하위 경로들을 여기에 추가
     { index: true, element: <MainPage /> },
-    { path: "/main/category", element: <Category /> } // '/category' 경로 추가
+    { path: "brand", element: <Brand /> } // '/category' 경로 추가
     // 예: { path: "other-page", element: <OtherPage /> },
   ]},
 ]);
