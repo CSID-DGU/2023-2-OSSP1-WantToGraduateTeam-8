@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MatchingService {
+public class MatchingBloomService {
 
     private final BrandQueue brandQueue;
     private final UserRepository userRepository;
@@ -38,7 +38,6 @@ public class MatchingService {
 
 
 
-        Map<Integer,Brand> brandList = new HashMap();
         /*매장 대기열 생성*/
         for(SelectDto selectDto : selectInfo.getPreferBrandList()){
             log.info("[MatchingService] selectDto: {}", selectDto);
