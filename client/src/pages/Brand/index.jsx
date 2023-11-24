@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -38,8 +39,9 @@ const mockBrandList = [
 ];
 export default function Brand({ categoryName }) {
   const [brandList, setBrandList] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]); // 새로운 상태 추가
-
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const navigate = useNavigate(); // useNavigate hook을 사용하여 navigate 함수를 가져옴
+  const [priorityMap, setPriorityMap] = useState({});//우선순위맵
 
   useEffect(() => {
     // 실제 서버로부터 데이터를 가져오는 로직이 구현
@@ -64,18 +66,39 @@ export default function Brand({ categoryName }) {
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   const groupedBrandList = groupCategories(brandList);
   
-  const handleSelectButtonClick = (brand) => {
+    const handleSelectButtonClick = (brand) => {
+    // 이전 선택된 브랜드에 대한 우선순위 확인
+    const brandPriority = priorityMap[brand.id] || null;
+
     if (selectedBrands.includes(brand)) {
+      // 선택 취소 시 priorityMap 업데이트
       const updatedBrands = selectedBrands.filter(item => item !== brand);
       setSelectedBrands(updatedBrands);
+      // 우선순위 삭제
+      if (brandPriority) {
+        const updatedPriorityMap = { ...priorityMap };
+        delete updatedPriorityMap[brand.id];
+        setPriorityMap(updatedPriorityMap);
+      }
     } else {
       if (selectedBrands.length < 3) {
         setSelectedBrands([...selectedBrands, brand]);
+        // 우선순위 설정
+        setPriorityMap({ ...priorityMap, [brand.id]: selectedBrands.length + 1 });
       }
     }
   };
 
+  const handleMatchingButtonClick = () => {
+    const selectedBrandIds = selectedBrands.map(brand => brand.id);
 
+    console.log('선택한 브랜드 우선순위:', priorityMap);
+
+    // 서버로 선택한 브랜드와 우선순위를 전송
+    // fetch 또는 axios 등을 사용하여 서버에 데이터를 전송하는 로직을 추가해야 합니다.
+
+    navigate('/matching'); // 
+  };
   return (
    <>
         <Mobile>
@@ -102,6 +125,9 @@ export default function Brand({ categoryName }) {
         ))}
             </BrandListWrapper>
           </MobileWrapper>
+          <FixedButton>
+          <MatchingButton onClick={handleMatchingButtonClick}>매칭하기</MatchingButton>
+      </FixedButton>
           </MobileContainer>
 
         </Mobile>
@@ -209,5 +235,31 @@ const SelectButton = styled.button`
 
   &:hover {
     background: #F29788;
+  }
+`;
+
+const FixedButton = styled.div`
+  position: fixed;
+  bottom: 0px;
+ 
+`;
+
+const MatchingButton = styled.button`
+ background: #F1E050;
+  border: none;
+  width: 24rem;
+  height: 4.6875rem;
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  font-style: bold;
+  font-weight: 900;
+  line-height: 130%;
+  color: #040404;
+  border-radius: 5px;
+  cursor: pointer;
+  
+
+  &:hover {
+    background: #EDE493;
   }
 `;

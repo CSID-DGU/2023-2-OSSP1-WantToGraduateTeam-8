@@ -1,27 +1,33 @@
+// App.jsx
 import React, { useContext } from 'react';
-import Navbar from './components/Navbar/index'
-import { useRoutes, Navigate } from 'react-router-dom';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar/index';
+import LoginMain from './components/LoginMain';
+import MainPage from './pages/MainPage/index';
+import Brand from './pages/Brand/index';
+import Matching from './pages/Matching';
 import { AuthContext } from '../src/components/Login/AuthContext';
-import { useState } from "react";
-import LoginMain from './components/LoginMain'
-import MainPage from './pages/MainPage/index'
-import Brand from './pages/Brand/index'
+import Login from './components/Login/index';
+import Signup from './components/Signup/index';
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);
-  const routes = useRoutes([
-    // 여기에 App 컴포넌트 하위의 라우트를 정의
-    { path: "/", element: <MainPage /> },
-    { path: "/brand", element: <Brand /> }
-    // 예: { path: "other-page", element: <OtherPage /> },
-  ]);
 
   return (
     <>
       {isLoggedIn && <Navbar />}
-      {routes}
+      <Routes>
+        {!isLoggedIn && (
+          <>
+            <Route path="/" element={<LoginMain />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </>
+        )}
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/brand" element={<Brand />} />
+        <Route path="/matching" element={<Matching />} />
+      </Routes>
     </>
   );
 }

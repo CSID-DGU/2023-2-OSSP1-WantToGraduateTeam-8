@@ -92,7 +92,7 @@ export default function MainPage() {
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
                       </Link> */}
-                       <Link to="brand" onClick={() => handleCategoryClick(category.name)}>
+                       <Link to="/brand" onClick={() => handleCategoryClick(category.name)}>
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
                       </Link>   
