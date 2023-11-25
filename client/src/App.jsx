@@ -9,6 +9,7 @@ import Matching from './pages/Matching';
 import { AuthContext } from '../src/components/Login/AuthContext';
 import Login from './components/Login/index';
 import Signup from './components/Signup/index';
+import Review from "./components/Review/index";
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -31,3 +32,5 @@ export default function App() {
     </>
   );
 }
+
+/**/

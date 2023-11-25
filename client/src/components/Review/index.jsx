@@ -1,184 +1,142 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from './AuthContext';
-import Delishare from '../../assets/imgs/Login_logo.svg'
+import React, { useContext } from 'react';
+import { useState } from "react";
 import styled from 'styled-components'
-import { useMediaQuery } from "react-responsive"
-import { NavLink, Link, useHistory } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-export const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({
-      query: "(max-width:768px)"
-    });
-    return <>{isMobile && children}</>
-  }
+import { useMediaQuery } from 'react-responsive'
+import { NavLink, Link } from 'react-router-dom'
+import { AuthContext } from '../Login/AuthContext'
+import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
+import SearchImg from '../../assets/imgs/search_image.svg'
+import Stars from '../../assets/imgs/ProfileStars.png'
   
-  export const Pc = ({ children }) => {
-    const isPc = useMediaQuery({
-      query: "(min-width:769px)"
-    });
-    return <>{isPc && children}</>
-  }
+export default function Review() {
 
+    const [review, submitReview] = useState('');
 
-
-  export default function Login() {
-    const { login } = useContext(AuthContext);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-  
-    const handleLogin = () => {
-      const correctUsername = 'abcd'; // 임시 아이디
-      const correctPassword = '1234'; // 임시 비밀번호
-  
-      if (username === correctUsername && password === correctPassword) {
-        login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경.
-  
-        // 로그인 성공 시 MainPage로 이동.
-        navigate('/main');
-      } else {
-        alert('아이디 혹은 비밀번호가 틀립니다.');
-      }
+    const handleSubmit = () => {
+      window.alert('개인정보가 수정되었습니다.');
+      // 서버로 개인정보를 전송하고 처리하는 로직이 추가되어야 함.
+      window.location.href = '/main';
+      const newMember = { review };
     };
-  
     
   return (
    <>
-        <Mobile>
-          <MobileContainer>
-          <MobileWrapper>
-          <Logo>
-            <Link to="/">
-            <img src={Delishare} alt='Logo'></img>
-            </Link> 
-          </Logo>
-          <LoginSection>
-            <b>ID 로그인</b>
-        <LoginForm>
-          <InputField input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="아이디" />
-          <InputField input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
-          <LoginButton onClick={handleLogin}><p>로그인</p></LoginButton>
-        </LoginForm>
-          </LoginSection>
-          <RegisterLink to="/signup">회원가입</RegisterLink>
-            </MobileWrapper>
-          </MobileContainer>
-
-        </Mobile>
-
-
-        <Pc>
-            <PcWrapper>
-            pc
-            </PcWrapper>   
-        </Pc>
+        <ReviewDiv>
+          <ReviewInfo>
+            <Logo>
+              <Delishare/>
+            </Logo>
+            <ReviewInfoDiv>
+                <ReviewImg>
+          
+                </ReviewImg>
+                <ReviewNick> (상대방 닉네임) </ReviewNick>
+                <ReviewStar>
+                  <img src = {Stars} width='161.25px' alt='별점'/>
+                </ReviewStar>
+                <OppReview> 리뷰 </OppReview>
+                <InputField input type = 'text' value = {review} 
+                    onChange = {(e) => submitReview(e.target.value)} 
+                    placeholder = '상대방이 어떠하셨나요?'/>
+            </ReviewInfoDiv>
+            <ReviewBtn onClick={handleSubmit}> 작성완료 </ReviewBtn>
+          </ReviewInfo>
+        </ReviewDiv>
    </>
   )
 }
 
-const PcWrapper = styled.div`
-width: 1920px;
-height: 305px;
-flex-shrink: 0;
-background: #FF4256;
+/* 별점 추후 구현 */
+
+const ReviewDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height : 100vh;
 `
 
-const MobileContainer = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-
-`
-
-const MobileWrapper = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 22.125rem;
-height: 30.625rem;
-flex-shrink: 0;
-border-radius: 0.9375rem;
-background: #FF7062;
-margin-top : 10.06rem;
+const ReviewInfo = styled.div`
+  width: 22.5rem;
+  height: 33.75rem;
+  border-radius : 0.9375rem;    
+  background-color : #FF7062;
 `
 
 const Logo = styled.div`
-margin-right : 1rem;
-img{
-  width: 8.8125rem;
-  height: 4.5625rem;
-  cursor : pointer;
+  position : relative;
+  left : 6.75rem;
+` 
 
-}
+const ReviewInfoDiv = styled.div`
+  position : relative;
+  width: 20.5rem;
+  height: 27.5rem;
+  left : 0.975rem;
+  top : -2.5rem;
+  border-radius : 0.9375rem;    
+  background-color : #FFFFFF;
 `
 
-const LoginSection = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 20.5625rem;
-height: 21.25rem;
-flex-shrink: 0;
-border-radius: 0.9375rem;
-background: #FFF;
-b{
-    color: #000;
-  text-align: center;
-  font-size: 1.40625rem;
-  font-style: bold;
-  font-weight: 400;
-  line-height: 130%; /* 1.82813rem */
-  margin-top : 2.94rem;
-}
+const ReviewImg = styled.div`
+position : relative;
+margin : 2.5rem 5.75rem 0rem 5.75rem;
+width : 9rem;
+height : 9rem;
+top : 1.5rem;
+border : 1px solid #000000;
+border-radius : 4.5rem;
 `
-const LoginForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-`;
+
+const ReviewNick = styled.p`
+position : relative;
+top : 2.25rem;
+font-weight : bold;
+font-size : 1.25rem;
+text-align : center;
+`
+
+const ReviewStar = styled.div`
+position : relative;
+margin-left : 5.25rem;
+border : none;
+top : 2.5rem;
+width : 10rem;
+height : 2rem;
+font-size : 1.25rem;
+color : #FFC000;
+`
+
+const OppReview = styled.div`
+position : relative;
+left : 1.75rem;
+top : 3.75rem;
+color : #FF7062;
+font-weight : bold;
+`
 
 const InputField = styled.input`
-  width: 18.75rem;
-  height: 3.125rem;
-  border-radius: 0.9375rem;
-  margin-bottom : 0.3rem;
-  border: 1px solid #7D7D7D;
-`;
+position : relative;
+left : 0.925rem;
+top : 3.75rem;
+width: 16.5rem;
+height: 5rem;
+border-radius: 1rem;
+margin-top : 0.25rem;
+padding-left : 1rem;
+padding-right : 1rem;
+border: 2px solid #7D7D7D;
+`
 
-const LoginButton = styled.button`
-width: 18.71525rem;
-height: 3.0625rem;
-margin-top : 2rem;
-flex-shrink: 0;
-border-radius: 0.9375rem;
-background: #FF7062;
-border : none;
-  cursor: pointer;
-  p{
-    color: #FFF;
-text-align: center;
-font-size: 1.09375rem;
-font-style: bold;
-font-weight: 800;
-line-height: 100%; /* 1.09375rem */
-
-  }
-  &:hover {
-    background: #F29788; /* 버튼 클릭 배경색 변경 */
-  }
-`;
-
-const RegisterLink = styled(NavLink)`
-  margin-top: 1.8rem;
-  color: #FFF;
-text-align: center;
-font-size: 0.9375rem;
-font-style: normal;
-font-weight: 400;
-line-height: 100%; /* 0.9375rem */
-
- 
-`;
+const ReviewBtn = styled.button`
+  position : relative;
+  width : 18.75rem;
+  height : 3rem;
+  left : 1.875rem;
+  top : -6.375rem;
+  color : #FFFFFF;
+  font-family : 'Pretendard';
+  font-size : 1.125rem;
+  background-color : #FF7062;
+  border-radius : 0.75rem;
+  border : none;
+`
