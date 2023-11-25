@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 public class PreferBrand extends BaseTimeEntity {
 
@@ -29,10 +30,13 @@ public class PreferBrand extends BaseTimeEntity {
     @JoinColumn(name="user_id")
     private User user;
 
+    @Column
+    private int priority;
     //1L [{1순위,BBQ}, mdasf,sdfisdg]
     // key : value = 순위 : 브랜드ID
-    @OneToMany(mappedBy = "preferBrand")
-    private Set<Brand> brandList = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
 }
 /*
 1. 사용자가 원하는 매장 1,2,3 선택

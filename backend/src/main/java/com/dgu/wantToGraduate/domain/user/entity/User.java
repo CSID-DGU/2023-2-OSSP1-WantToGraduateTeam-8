@@ -3,6 +3,7 @@ package com.dgu.wantToGraduate.domain.user.entity;
 import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 import com.dgu.wantToGraduate.domain.chat.entity.ChatRoom;
 import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
+import com.dgu.wantToGraduate.domain.matching.entity.PreferTable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,4 +55,12 @@ public class User extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "user") // mappedBy : 연관관계의 주인이 아니다. (주인은 FK를 가진 UserReview)
     private List<UserReview> userReviews=new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name="waitUserData_id")
+    private WaitUserData waitUserData;
+
+    @ManyToOne
+    @JoinColumn(name="preferTable_id")
+    private PreferTable preferTable;
 }
