@@ -18,4 +18,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long>{
 
     @Query("select b from Brand b where b.brandName like %:brandName%")
     Optional<List<Brand>> searchBrandByName(@Param("brandName") String brandName);
+
+    public Brand findByBrandName(String brandName);
 }

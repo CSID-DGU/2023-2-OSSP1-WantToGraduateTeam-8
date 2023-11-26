@@ -29,10 +29,13 @@ public class PreferBrand extends BaseTimeEntity {
     @JoinColumn(name="user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name="brand_id")
+    private Brand brand;
     //1L [{1순위,BBQ}, mdasf,sdfisdg]
     // key : value = 순위 : 브랜드ID
-    @OneToMany(mappedBy = "preferBrand")
-    private Set<Brand> brandList = new HashSet<>();
+//    @OneToMany(mappedBy = "preferBrand")
+//    private Set<Brand> brandList = new HashSet<>();
 }
 /*
 1. 사용자가 원하는 매장 1,2,3 선택
