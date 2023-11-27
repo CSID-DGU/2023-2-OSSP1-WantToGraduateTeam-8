@@ -15,6 +15,7 @@ import Fusion from '../../assets/imgs/Fusion.png'
 import Fastfood from '../../assets/imgs/Hamburger.png'
 import Bunsik from '../../assets/imgs/Bunsik.png'
 import Nightfood from '../../assets/imgs/NightFood.png'
+import Toggle from '../../components/Toggle/index'
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -102,7 +103,9 @@ export default function MainPage() {
                 </MenuGroup>
               ))}
             </CategoriesContainer>
+            <Toggle/>
           </MobileWrapper>
+
           </MobileContainer>
 
         </Mobile>

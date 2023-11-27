@@ -9,7 +9,9 @@ import Matching from './pages/Matching';
 import { AuthContext } from '../src/components/Login/AuthContext';
 import Login from './components/Login/index';
 import Signup from './components/Signup/index';
-import Review from "./components/Review/index";
+import Chatting from './pages/Chatting/index.';
+import Mypage from './components/Mypage/index';
+import Review from './components/Review';
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -28,9 +30,9 @@ export default function App() {
         <Route path="/main" element={<MainPage />} />
         <Route path="/brand" element={<Brand />} />
         <Route path="/matching" element={<Matching />} />
+        <Route path="/chatting" element={<Chatting />} />
+        <Route path="/mypage" element={<Mypage />} />
       </Routes>
     </>
   );
 }
-
-/**/

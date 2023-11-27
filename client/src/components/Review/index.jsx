@@ -7,7 +7,8 @@ import { AuthContext } from '../Login/AuthContext'
 import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
-  
+import Toggle from '../Toggle';
+
 export default function Review() {
 
     const [review, submitReview] = useState('');
