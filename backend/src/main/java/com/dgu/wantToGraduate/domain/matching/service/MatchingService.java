@@ -40,11 +40,12 @@ public class MatchingService {
     public MatchingDto.ResponseDto matching(MatchingDto.RequestDto selectInfo) {
         makePreferTable(selectInfo);
         MatchingDto.ResponseDto matchingResult = null;
-        if(waitUsers.size() > 5) {
+        if(waitUsers.size() > 6) {
             matchingResult = match();
         }
         return matchingResult;
-        //todo: 선호도 테이블 작성 구현 완료!!(아마..? 좀 더 테스팅+디버깅) 나머지 구현 해야됨. 상황 주혁이형한테 공유
+        //todo: matching 결과를 mate들의 list로?
+        //todo: sameNum 초기화 문제 해결
     }
 
     //Brand Id 리스트 두 개로 sameNum 계산
@@ -59,7 +60,9 @@ public class MatchingService {
     //RequestDto 받아서 선호도 테이블 작성
     private void makePreferTable(MatchingDto.RequestDto selectInfo) {
         //받은 정보들로 waitUser 빌드
-        List<String> brandNameList = selectInfo.getPreferBrandList();
+        List<String> brandNameList = selectInfo.getPreferBrandList().stream()
+                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
+                .collect(Collectors.toList());
         User insertUser = userRepository.findById(selectInfo.getUserId()).orElseThrow();
         List<Long> brandIdList = brandNameList.stream()
                 .map(brandRepository::findByBrandName)
@@ -80,7 +83,7 @@ public class MatchingService {
             preferTableUser.setSameNum(sameNum);
             insertPreferTableUser.setSameNum(sameNum);
             preferTable.addUser(insertWaitUser.getUser().getId(), preferTableUser);
-            preferTable.addUser(waitUser.getUser().getId(), insertWaitUser);
+            preferTable.addUser(waitUser.getUser().getId(), insertPreferTableUser);
         }
     }
 

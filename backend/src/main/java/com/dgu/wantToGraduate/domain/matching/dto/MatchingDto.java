@@ -11,7 +11,13 @@ public class MatchingDto {
     @Getter
     public static class RequestDto{
         private Long userId;
-        private List<String> preferBrandList;
+        private List<SelectDto> preferBrandList;
+        @Getter
+        @NoArgsConstructor
+        public static class SelectDto{
+            private String brandName;
+            private int priority;
+        }
     }
 
     @AllArgsConstructor
