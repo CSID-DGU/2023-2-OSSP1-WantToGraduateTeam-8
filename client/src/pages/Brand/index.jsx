@@ -209,10 +209,10 @@ const BrandSet = styled.div`
   border-radius: 0.9375rem;
   font-size: 1rem;
   font-style: normal;
-  border: 1px solid #7D7D7D;
+  border : none;
   cursor: pointer;
   position: relative;
-
+  box-shadow: 2px 1px 3px 3px rgba(0, 0, 0, 0.2);
   &:hover {
     button {
       background: #F29788;
@@ -233,7 +233,7 @@ const SelectButton = styled.button`
   font-weight: 900;
   line-height: 130%;
   color: #FFF;
-
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
   &:hover {
     background: #F29788;
   }
@@ -258,7 +258,7 @@ const MatchingButton = styled.button`
   color: #040404;
   border-radius: 5px;
   cursor: pointer;
-  
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 
   &:hover {
     background: #EDE493;

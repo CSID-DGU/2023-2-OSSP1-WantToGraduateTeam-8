@@ -32,6 +32,7 @@ export default function App() {
         <Route path="/matching" element={<Matching />} />
         <Route path="/chatting" element={<Chatting />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/review" element={<Review/>}/>
       </Routes>
     </>
   );
