@@ -15,6 +15,7 @@ import Fusion from '../../assets/imgs/Fusion.png'
 import Fastfood from '../../assets/imgs/Hamburger.png'
 import Bunsik from '../../assets/imgs/Bunsik.png'
 import Nightfood from '../../assets/imgs/NightFood.png'
+import Toggle from '../../components/Toggle/index'
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -54,6 +55,30 @@ export default function MainPage() {
     
   ];
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
+  const handleCategoryClick = async (categoryName) => {
+    try {
+      // 서버에 요청을 보낼 준비 (axios 또는 fetch 등을 사용하여 API 요청)
+      const response = await fetch('https://example.com/api/categories', {
+        method: 'POST', // POST 방식으로 데이터 전송
+        headers: {
+          'Content-Type': 'application/json', // 전송할 데이터의 타입 설정
+        },
+        body: JSON.stringify({ category: categoryName }), // 카테고리 이름을 JSON 형식으로 변환하여 전송
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+  
+      // 서버로부터 응답 받은 데이터 처리
+      const data = await response.json();
+      // data를 Categories 컴포넌트로 전달하여 해당 카테고리의 음식점 리스트를 업데이트
+      // 여기서 data를 Categories 컴포넌트로 전달하거나 상태를 업데이트하는 등의 작업을 할 수 있다.
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+  
   return (
    <>
         <Mobile>
@@ -64,18 +89,23 @@ export default function MainPage() {
                 <MenuGroup key={index}>
                   {group.map((category, idx) => (
                     <Menu key={idx}>
-                      {/* <Link to={`/category/${category.name}`}> */}
-                      <Link to="category">
+                      {/* <Link to="category">
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
-                      </Link>
-                      {/* </Link> */}
+                      </Link> */}
+                       <Link to="/brand" onClick={() => handleCategoryClick(category.name)}>
+                        <b>{category.name}</b>
+                        <img src={category.image} alt={category.name} />
+                      </Link>   
+                      {/* -> api연결 할때 코드 */}
                     </Menu>
                   ))}
                 </MenuGroup>
               ))}
             </CategoriesContainer>
+            <Toggle/>
           </MobileWrapper>
+
           </MobileContainer>
 
         </Mobile>

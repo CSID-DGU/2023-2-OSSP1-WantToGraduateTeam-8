@@ -1,38 +1,22 @@
+// index.js
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LoginMain from "./components/LoginMain"
-import Login from "./components/Login/index"
-import Signup from "./components/Signup/index"
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AuthProvider } from './components/Login/AuthContext';
 import Navbar from './components/Navbar';
-import MainPage from './pages/MainPage/index'
-import { AuthProvider } from './components/Login/AuthContext'; // 경로는 실제 구조에 맞게 조정
-import Category from './pages/Categories/index'
 
-const router = createBrowserRouter([
-  { path: "/", element: <LoginMain /> },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> },
-  { path: "/main", element: <App />, children: [
-    // App 컴포넌트 내에서 처리할 추가적인 하위 경로들을 여기에 추가
-    { index: true, element: <MainPage /> },
-    { path: "/main/category", element: <Category /> } // '/category' 경로 추가
-    // 예: { path: "other-page", element: <OtherPage /> },
-  ]},
-]);
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <Router>
+        <App />
+      </Router>
     </AuthProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

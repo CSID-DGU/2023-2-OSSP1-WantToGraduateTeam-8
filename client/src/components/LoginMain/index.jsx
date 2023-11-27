@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from "react";
 import {ReactComponent as Delishare} from '../../assets/imgs/Login_logo.svg'
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
