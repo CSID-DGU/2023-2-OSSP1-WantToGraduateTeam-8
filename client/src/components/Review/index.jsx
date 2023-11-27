@@ -7,6 +7,7 @@ import { AuthContext } from '../Login/AuthContext'
 import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
+import ProfileImg from "../../assets/imgs/profile_pink.png"
 import Toggle from '../Toggle';
 import RateStar from '../RateStar/RateStar';
 
@@ -30,7 +31,7 @@ export default function Review() {
             </Logo>
             <ReviewInfoDiv>
                 <ReviewImg>
-          
+                  <img src={ProfileImg}/>
                 </ReviewImg>
                 <ReviewNick> (상대방 닉네임) </ReviewNick>
                 <ReviewStar>
@@ -74,25 +75,25 @@ const ReviewInfoDiv = styled.div`
   width: 20.5rem;
   height: 27.5rem;
   left : 0.975rem;
-  top : -2.5rem;
   border-radius : 0.9375rem;    
   background-color : #FFFFFF;
 `
 
 const ReviewImg = styled.div`
-position : relative;
-margin : 2.5rem 5.75rem 0rem 5.75rem;
-width : 9rem;
-height : 9rem;
-top : 1.5rem;
-border : 1px solid #000000;
-border-radius : 4.5rem;
+img {
+  position : relative;
+  margin : 2.5rem 5.75rem 0rem 5.75rem;
+  width : 9rem;
+  height : 9rem;
+  top : -1.5rem;
+  border-radius : 4.5rem;
+}
 `
 
 const ReviewNick = styled.p`
 position : relative;
-top : 2.25rem;
 font-weight : bold;
+top : -0.5rem;
 font-size : 1.25rem;
 text-align : center;
 `
@@ -101,9 +102,9 @@ const ReviewStar = styled.div`
 position : relative;
 margin-left : 5.25rem;
 border : none;
-top : 2.5rem;
 width : 10rem;
 height : 2rem;
+top : -2rem;
 font-size : 1.25rem;
 color : #FFC000;
 `
@@ -111,7 +112,7 @@ color : #FFC000;
 const OppReview = styled.div`
 position : relative;
 left : 1.75rem;
-top : 3.75rem;
+top : 0rem;
 color : #FF7062;
 font-weight : bold;
 `
@@ -119,8 +120,8 @@ font-weight : bold;
 const InputField = styled.input`
 position : relative;
 left : 0.925rem;
-top : 3.75rem;
 width: 16.5rem;
+top : 0rem;
 height: 5rem;
 border-radius: 1rem;
 margin-top : 0.25rem;
@@ -134,7 +135,7 @@ const ReviewBtn = styled.button`
   width : 18.75rem;
   height : 3rem;
   left : 1.875rem;
-  top : -6.375rem;
+  top : -4rem;
   color : #FFFFFF;
   font-family : 'Pretendard';
   font-size : 1.125rem;
