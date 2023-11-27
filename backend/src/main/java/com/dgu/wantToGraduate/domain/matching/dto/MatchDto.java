@@ -9,7 +9,7 @@ public class MatchDto {
     @Getter
     public static class RequestDto{
         private Long userId;
-        private List<Prefer> preferList;
+        private List<Prefer> preferBrandList;
 
         @Getter
         public static class Prefer{

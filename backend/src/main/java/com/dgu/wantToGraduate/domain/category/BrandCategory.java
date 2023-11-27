@@ -13,7 +13,7 @@ public enum BrandCategory {
     /*테스트 데이터셋 입니다.*/
     //🧑‍💻TODO: 실제 브랜드 데이터 포멧으로 변경
     // 커피점/카페
-    COFFEE("커피점/카페"),
+    CAFE("커피점/카페"),
     // 양식
     WESTERN("양식"),
     // 중식

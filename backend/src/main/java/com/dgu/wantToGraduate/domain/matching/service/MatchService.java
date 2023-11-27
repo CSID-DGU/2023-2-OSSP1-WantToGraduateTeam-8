@@ -29,8 +29,6 @@ public class MatchService {
     private final PreferBrandRepository preferBrandRepository;
     private final WaitUserDataRepository waitUserDataRepository;
     private final PreferTableRepository preferTableRepository;
-//    private static List<Long> waitRoom=new ArrayList<>();
-    private static HashMap<Long, List<List<User>>> preferTable=new HashMap<>();
 
     //매칭 대기방 생성
     public void createWaitRoom(MatchDto.RequestDto req){
@@ -38,12 +36,11 @@ public class MatchService {
 
         User user = userRepository.findById(req.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        brandRepository.searchBrandByName(req.getPreferList().get(0).getBrandName())
-                .orElseThrow(() -> new IllegalArgumentException("해당 브랜드가 없습니다."));
 
 
 
-        for(Prefer prefer : req.getPreferList()){
+
+        for(Prefer prefer : req.getPreferBrandList()){
             PreferBrand build = PreferBrand.builder()
                     .user(user)
                     .brand(brandRepository.findByBrandName(prefer.getBrandName()))
@@ -62,7 +59,6 @@ public class MatchService {
 
     }
     public void setPreferTable(){
-
         int sameNum=0;
 //        int waitRoomSize=waitRoom.size();
         int waitRoomSize = (int) waitUserDataRepository.count();
@@ -103,9 +99,7 @@ public class MatchService {
                 PreferTable build = PreferTable.builder()
                         .waitUserData(all.get(i))
                         .preferenceScore(sameNum)
-//                        .userList()
                         .build();
-//                                build.getUserList().add(all.get(j).getUser());
                 build.addUserList(all.get(j).getUser());
 
                 preferTableRepository.save(build);
@@ -115,40 +109,17 @@ public class MatchService {
                 PreferTable build2 = PreferTable.builder()
                         .waitUserData(all.get(j))
                         .preferenceScore(sameNum)
-//                        .userList(new ArrayList<>())
                         .build();
-//                                build2.getUserList().add(all.get(i).getUser());
                 build2.addUserList(all.get(i).getUser());
                 preferTableRepository.save(build2);
-
-//                if(preferTable.containsKey(user_i.getId())){
-//                    preferTable.get(user_i.getId()).get(sameNum).add(user_j);
-//                }else{
-//                    List<List<User>> userList=new ArrayList<>();
-//                    for(int k=0;k<4;k++){
-//                        List<User> user=new ArrayList<>();
-//                        userList.add(user);
-//                    }
-//                    userList.get(sameNum).add(user_j);
-//                    preferTable.put(user_i.getId(),userList);
-//                }
-//
-//                if(preferTable.containsKey(user_j.getId())){
-//                    preferTable.get(user_j.getId()).get(sameNum).add(user_i);
-//                }else{
-//                    List<List<User>> userList=new ArrayList<>();
-//                    for(int k=0;k<4;k++){
-//                        List<User> user=new ArrayList<>();
-//                        userList.add(user);
-//                    }
-//                    userList.get(sameNum).add(user_i);
-//                    preferTable.put(user_j.getId(),userList);
-//                }
             }
         }
 
     }
 
+    public void choice(){
+        private static
+    }
 
 
     public void showPreferTable(){
