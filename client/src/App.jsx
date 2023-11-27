@@ -11,6 +11,7 @@ import Login from './components/Login/index';
 import Signup from './components/Signup/index';
 import Chatting from './pages/Chatting/index.';
 import Mypage from './components/Mypage/index';
+import Review from './components/Review';
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);

@@ -7,6 +7,8 @@ import { IoMdHome } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 
+
+
 const Toggle = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,41 +18,41 @@ const Toggle = () => {
 
   return (
     <FloatingMenuContainer>
-      <ToggleButton onClick={toggleMenu}>
+      <ToggleButton onClick={toggleMenu} isOpen={isOpen}>
         <TiThMenu size={30} />
       </ToggleButton>
-      {isOpen && (
-        <MenuList>
-          <MenuItem>
-          <IoMdHome size={44} color='#fff'/>
-            <NavLink to="/"></NavLink>
-          </MenuItem>
-          <MenuItem>
-          <IoChatboxEllipsesOutline size={44} color='#fff'/>
-            <NavLink to="/chatting"></NavLink>
-          </MenuItem>
-          <MenuItem>
-          <CgProfile size={44} color='#fff'/>
-            <NavLink to="/mypage"></NavLink>
-          </MenuItem>
-        </MenuList>
-      )}
+      <MenuList isOpen={isOpen}>
+        <MenuItem>
+          <NavLink to="/main">
+            <IoMdHome size={44} color="#fff" />
+          </NavLink>
+        </MenuItem>
+        <MenuItem>
+          <NavLink to="/chatting">
+            <IoChatboxEllipsesOutline size={45} color="#fff" />
+          </NavLink>
+        </MenuItem>
+        <MenuItem>
+          <NavLink to="/mypage">
+            <CgProfile size={44} color="#fff" />
+          </NavLink>
+        </MenuItem>
+      </MenuList>
     </FloatingMenuContainer>
   );
 };
 
 const FloatingMenuContainer = styled.div`
-  border : 1px solid black;
   position: fixed;
   bottom: 20px;
   right: 20px;
 `;
 
 const ToggleButton = styled.button`
-width: 4rem;
-height: 4rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
-  background-color: #FF7062;
+  background-color: #ff7062;
   border: none;
   color: white;
   display: flex;
@@ -59,25 +61,27 @@ height: 4rem;
   font-size: 24px;
   cursor: pointer;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
 `;
 
 const MenuList = styled.ul`
-
   list-style-type: none;
   padding: 0;
   position: absolute;
-  bottom: 80px;
+  top: ${({ isOpen }) => (isOpen ? '-240px' : '50px')};
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+  transform: translateY(${({ isOpen }) => (isOpen ? '0' : '-10px')});
 `;
 
 const MenuItem = styled.li`
-  background-color: #FF9489;
-  
-  display : flex;
-  flex-direction : column;
+  background-color: #ff9489;
+  display: flex;
+  flex-direction: column;
   padding: 10px;
   border-radius: 100%;
   margin-bottom: 10px;
@@ -86,7 +90,7 @@ const MenuItem = styled.li`
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   width: 3rem;
   height: 3rem;
-  cursor : pointer;
+  cursor: pointer;
   a {
     text-decoration: none;
     color: black;

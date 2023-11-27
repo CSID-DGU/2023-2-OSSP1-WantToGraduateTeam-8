@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Toggle from '../../components/Toggle';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -129,7 +130,7 @@ export default function Brand({ categoryName }) {
           <MatchingButton onClick={handleMatchingButtonClick}>매칭하기</MatchingButton>
       </FixedButton>
           </MobileContainer>
-
+          <Toggle/>
         </Mobile>
 
 

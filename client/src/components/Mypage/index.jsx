@@ -8,6 +8,7 @@ import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_lo
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
 //import ProfileStars from '../../assets/imgs/ProfileStars.png'
+import Toggle from '../Toggle';
 
 export default function Mypage() {
   const [nickname, resetNickname] = useState('');
@@ -63,6 +64,7 @@ export default function Mypage() {
         <MyReviewDiv></MyReviewDiv>
       </ProfileReviseDiv>
       <ProfileReviseBtn onClick={handleRevise}> 수정 </ProfileReviseBtn>
+      <Toggle/>
     </MypageDiv>
   )
 }

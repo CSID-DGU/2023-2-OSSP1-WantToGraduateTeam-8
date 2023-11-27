@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../assets/imgs/MatchingSpin.gif';
+import Toggle from '../../components/Toggle';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -25,7 +26,7 @@ export default function Matching() {
   // 예시: 매칭이 완료되었다고 가정하고, 일정 시간 후에 chatting 페이지로 이동하는 함수
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/chatting'); // '/chatting'은 채팅 페이지의 경로입니다. 실제 경로에 맞게 수정해주세요.
+      navigate('/chatting'); 
     }, 3000); // 3초 후에 채팅 페이지로 이동하도록 설정
 
     return () => clearTimeout(timer); // 컴포넌트가 unmount될 때 타이머 클리어
@@ -42,7 +43,7 @@ export default function Matching() {
           </MobileWrapper>
         
           </MobileContainer>
-
+          <Toggle/>
         </Mobile>
 
 

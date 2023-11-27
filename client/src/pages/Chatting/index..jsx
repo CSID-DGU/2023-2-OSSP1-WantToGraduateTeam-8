@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Toggle from '../../components/Toggle';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -31,7 +32,7 @@ export default function Chatting() {
           </MobileWrapper>
         
           </MobileContainer>
-
+          <Toggle/>
         </Mobile>
 
 
