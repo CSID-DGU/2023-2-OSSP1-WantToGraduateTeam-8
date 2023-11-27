@@ -8,10 +8,14 @@ import com.dgu.wantToGraduate.domain.matching.repository.PreferTable;
 import com.dgu.wantToGraduate.domain.type.WaitUser;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.Funnels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +37,11 @@ public class MatchingService {
     private PreferTable preferTable = new PreferTable();
     //key: UserId, value: 해당 User의 모든 다른 User의 리스트(sameNum, grade로 정렬)
 
-    private List<User> finishList = new ArrayList<>();
+    private BloomFilter<Long> finishList = BloomFilter.create(
+            Funnels.longFunnel(),
+            1000,
+            0.01
+    );
 
     private List<User> failList = new ArrayList<>();
 
@@ -89,20 +97,26 @@ public class MatchingService {
 
     private MatchingDto.ResponseDto match() {
         for(WaitUser waitUser : waitUsers){
-            if(finishList.contains(waitUser.getUser())) continue;
-            List<User> mateData = new ArrayList<>();
-            mateData.add(waitUser.getUser());
-            for(WaitUser mateUser : preferTable.getWaitUser(waitUser.getUser().getId())){
-                if(finishList.contains(mateUser.getUser())) continue;
-                if(mateData.size() >= 3) break;
-                mateData.add(mateUser.getUser());
+            if(!finishList.mightContain(waitUser.getUser().getId())) {
+                List<User> mateData = new ArrayList<>();
+                mateData.add(waitUser.getUser());
+                for (WaitUser mateUser : preferTable.getWaitUser(waitUser.getUser().getId())) {
+                    if (!finishList.mightContain(mateUser.getUser().getId())) {
+                        if (mateData.size() >= 3) break;
+                        mateData.add(mateUser.getUser());
+                    }
+                }
+                if (mateData.size() > 2) { //결과 반환
+                    for (User user : mateData) {
+                        finishList.put(user.getId());
+                    }
+                    return convertToDto(mateData);
+                } else {
+                    failList.add(waitUser.getUser());
+                    break;
+                }
             }
-            if(mateData.size() > 2) { //결과 반환
-                return convertToDto(mateData);
-            } else {
-                failList.add(waitUser.getUser());
-                break;
-            }
+
         }
         return null;
     }
