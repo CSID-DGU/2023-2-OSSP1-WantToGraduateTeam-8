@@ -95,7 +95,7 @@ export default function Brand({ categoryName }) {
     console.log('선택한 브랜드 우선순위:', priorityMap);
 
     // 서버로 선택한 브랜드와 우선순위를 전송
-    // fetch 또는 axios 등을 사용하여 서버에 데이터를 전송하는 로직을 추가해야 합니다.
+    // fetch 또는 axios 등을 사용하여 서버에 데이터를 전송하는 로직을 추가
 
     navigate('/matching'); // 
   };
