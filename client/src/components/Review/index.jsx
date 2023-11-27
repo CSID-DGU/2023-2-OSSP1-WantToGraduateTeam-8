@@ -8,6 +8,7 @@ import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_lo
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
 import Toggle from '../Toggle';
+import RateStar from '../RateStar/RateStar';
 
 export default function Review() {
 
@@ -33,7 +34,7 @@ export default function Review() {
                 </ReviewImg>
                 <ReviewNick> (상대방 닉네임) </ReviewNick>
                 <ReviewStar>
-                  <img src = {Stars} width='161.25px' alt='별점'/>
+                  <RateStar/>
                 </ReviewStar>
                 <OppReview> 리뷰 </OppReview>
                 <InputField input type = 'text' value = {review} 

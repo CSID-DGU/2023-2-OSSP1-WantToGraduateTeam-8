@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Toggle from '../../components/Toggle';
+import RateStar from '../../components/RateStar/RateStar';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -73,8 +74,12 @@ background: #FFF;
 const ChattingContainer = styled.div`
 display : flex;
 flex-direction : column;
+width: 20.8125rem;
+height: 40.5625rem;
+border-radius: 0.9375rem;
+border: 1px solid #FF7062;
 align-items : center;
 background: #FFF;
-margin-top : 13rem;
+margin-top : 1.25rem;
 
 `
