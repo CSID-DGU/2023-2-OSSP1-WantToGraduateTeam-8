@@ -32,4 +32,8 @@ public class PreferTable {
             return waitUsers;
         });
     }
+
+    public ConcurrentSkipListSet<WaitUser> getWaitUser(Long key) {
+        return preferTable.get(key);
+    }
 }

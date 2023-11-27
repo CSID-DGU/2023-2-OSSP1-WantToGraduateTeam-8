@@ -18,14 +18,6 @@ public class MatchingDto {
     @Builder
     @Getter
     public static class ResponseDto{
-        private Long brandId;
-        private List<MatchDto> matchList;
-
-        @Builder
-        @AllArgsConstructor
-        @Getter
-        public static class MatchDto{
-            private String nickname;
-        }
+        private List<String> matchList;
     }
 }

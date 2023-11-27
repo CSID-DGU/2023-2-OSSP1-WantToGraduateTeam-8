@@ -18,8 +18,8 @@ public class MatchingController {
     @PostMapping("/run")
     public ResponseEntity<?> match(@RequestBody MatchingDto.RequestDto requestDto){
         log.info("[MatchingController] 진입");
-        matchingService.matching(requestDto);
+        MatchingDto.ResponseDto matchingResult = matchingService.matching(requestDto);
         log.info("[MatchingController] 종료");
-        return null;
+        return ResponseEntity.ok(matchingResult);
     }
 }
