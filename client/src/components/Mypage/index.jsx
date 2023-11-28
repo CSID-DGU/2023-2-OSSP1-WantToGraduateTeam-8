@@ -7,8 +7,10 @@ import { AuthContext } from '../Login/AuthContext'
 import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
-//import ProfileStars from '../../assets/imgs/ProfileStars.png'
+import ProfileImg from "../../assets/imgs/profile_pink.png"
 import Toggle from '../Toggle';
+import RateStar from '../RateStar/RateStar';
+//import ProfileStars from '../../assets/imgs/ProfileStars.png'
 
 export default function Mypage() {
   const [nickname, resetNickname] = useState('');
@@ -17,13 +19,10 @@ export default function Mypage() {
   const { logout } = useContext(AuthContext);
 
   const handleRevise = () => {
-    const nicknameRegex = /^(?=.*[a-zA-Z])[A-Za-z]{0,}$/;
     const accountnumRegex = /^(?=[0-9]){16}$/;
     const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/; 
 
-    if (!nicknameRegex.test(nickname)) {
-      window.alert('닉네임은 10자 이하의 문자 혹은 숫자를 포함해야 합니다.');
-    }else if (!accountnumRegex.test(accountnum)) {
+    if (!accountnumRegex.test(accountnum)) {
       window.alert('계좌번호는 숫자만 입력해야 합니다.');
     } else if (!passwordRegex.test(password)) {
       window.alert('비밀번호는 4자 이상의 문자 혹은 숫자를 포함해야 합니다.');
@@ -33,7 +32,7 @@ export default function Mypage() {
   
     }
 
-    const newMember = { nickname, accountnum, password };
+    const newMember = { accountnum, password };
   };
 
   const handleLogout = () => {
@@ -45,13 +44,13 @@ export default function Mypage() {
     <MypageDiv>
       <ProfileInfoDiv>
         <ProfileText> MY PROFILE </ProfileText>
-        <ProfileImg>
-          
-        </ProfileImg>
+        <ProfileImgDiv>
+          <img src={ProfileImg}/>
+        </ProfileImgDiv>
         <ProfileNick> (본인 닉네임) </ProfileNick>
-        <ProfileStar>
-          <img src = {Stars} width='161.25px' alt='별점'/>
-        </ProfileStar>
+        <ReviewStar>
+          <RateStar/>
+        </ReviewStar>
         <ProfileAccnt> 계좌번호 : XXXX-XXXX-XXXX-XXXX</ProfileAccnt>
       </ProfileInfoDiv>
       <ProfileReviseDiv>
@@ -64,7 +63,6 @@ export default function Mypage() {
         <MyReviewDiv></MyReviewDiv>
       </ProfileReviseDiv>
       <ProfileReviseBtn onClick={handleRevise}> 수정 </ProfileReviseBtn>
-      <Toggle/>
     </MypageDiv>
   )
 }
@@ -118,28 +116,34 @@ const ProfileText = styled.p`
   text-align : center;
 `
 
-const ProfileImg = styled.div`
+const ProfileImgDiv = styled.div`
+img {
   margin : 2.5rem 6.125rem 0rem 6.125rem;
   width : 9rem;
   height : 9rem;
-  border : 1px solid #000000;
   border-radius : 4.5rem;
+}
 `
 
 const ProfileNick = styled.p`
-  margin : 0.875rem 0 0.5rem 0;
+  margin : 0.875rem 0 0.75rem 0;
   text-align : center;
   font-size : 1.125rem;
 `
 
-const ProfileStar = styled.div`
-  margin-left : 5.625rem;
-  width : 10rem;
-  height : 2rem;
+const ReviewStar = styled.div`
+position : relative;
+margin-left : 5.25rem;
+border : none;
+width : 10rem;
+height : 2rem;
+top :-1.5rem;
+font-size : 1.25rem;
+color : #FFC000;
 `
 
 const ProfileAccnt = styled.p`
-  margin : 1rem 1.375rem 1.375rem 1.375rem;
+  margin : 0.5rem 1.375rem 1.375rem 1.375rem;
   text-align : center;
   font-size : 1.125rem;
 `
