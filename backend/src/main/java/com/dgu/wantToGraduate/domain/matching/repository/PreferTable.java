@@ -2,8 +2,6 @@ package com.dgu.wantToGraduate.domain.matching.repository;
 
 
 import com.dgu.wantToGraduate.domain.type.WaitUser;
-import com.dgu.wantToGraduate.domain.user.entity.User;
-import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,6 +22,7 @@ public class PreferTable {
             if(waitUsers == null){
                 waitUsers = new ConcurrentSkipListSet<>(
                         Comparator.comparing(WaitUser::getSameNum, Comparator.reverseOrder())
+                                .thenComparing(WaitUser::getPriority)
                                 .thenComparing(WaitUser::getGrade, Comparator.reverseOrder())
                                 .thenComparing(wu -> wu.getUser().getId(), Comparator.reverseOrder())
                 );

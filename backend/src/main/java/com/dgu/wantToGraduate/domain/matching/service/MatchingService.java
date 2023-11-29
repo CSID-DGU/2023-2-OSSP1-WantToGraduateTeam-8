@@ -1,21 +1,17 @@
 package com.dgu.wantToGraduate.domain.matching.service;
 
 
-import com.dgu.wantToGraduate.domain.brand.entity.Brand;
-import com.dgu.wantToGraduate.domain.brand.repository.BrandRepository;
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto;
 import com.dgu.wantToGraduate.domain.matching.repository.PreferTable;
 import com.dgu.wantToGraduate.domain.type.WaitUser;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import com.google.common.hash.BloomFilter;
-import com.google.common.hash.Funnel;
 import com.google.common.hash.Funnels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-    private final BrandRepository brandRepository;
 
     private final UserRepository userRepository;
     private ConcurrentSkipListSet<WaitUser> waitUsers = new ConcurrentSkipListSet<>(
@@ -48,48 +43,52 @@ public class MatchingService {
     public MatchingDto.ResponseDto matching(MatchingDto.RequestDto selectInfo) {
         makePreferTable(selectInfo);
         MatchingDto.ResponseDto matchingResult = null;
-        if(waitUsers.size() > 6) {
+        if(waitUsers.size() > 4) {
             matchingResult = match();
         }
         return matchingResult;
-        //todo: matching 결과를 mate들의 list로?
-        //todo: sameNum 초기화 문제 해결
     }
 
-    //Brand Id 리스트 두 개로 sameNum 계산
-    private int calculateSameNum(List<Long> preferBrandList1, List<Long> preferBrandList2) {
-        List<Long> intersection = new ArrayList<>(preferBrandList1);
-        intersection.retainAll(preferBrandList2);
-        int sameNum = intersection.size();
+    private List<Integer> calculateSameNumAndPriority(WaitUser waitUser1, WaitUser waitUser2) {
+        List<String> brandNameList1 = waitUser1.getPreferBrand().stream()
+                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
+                .collect(Collectors.toList());
+        List<String> brandNameList2 = waitUser2.getPreferBrand().stream()
+                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
+                .collect(Collectors.toList());
+        List<Integer> sameNumAndPriority = new ArrayList<>();
+        List<String> intersection = new ArrayList<>(brandNameList1);
+        intersection.retainAll(brandNameList2);
+        int prioirty = 0;
+        for(String brandName : intersection) {
+            prioirty += Math.abs(waitUser1.findPriorityByBrandName(brandName) - waitUser2.findPriorityByBrandName(brandName));
+        }
+        sameNumAndPriority.add(intersection.size());
+        sameNumAndPriority.add(prioirty);
 
-        return sameNum;
+        return sameNumAndPriority;
     }
 
     //RequestDto 받아서 선호도 테이블 작성
     private void makePreferTable(MatchingDto.RequestDto selectInfo) {
         //받은 정보들로 waitUser 빌드
-        List<String> brandNameList = selectInfo.getPreferBrandList().stream()
-                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
-                .collect(Collectors.toList());
         User insertUser = userRepository.findById(selectInfo.getUserId()).orElseThrow();
-        List<Long> brandIdList = brandNameList.stream()
-                .map(brandRepository::findByBrandName)
-                .map(Brand::getId)
-                .collect(Collectors.toList());
         WaitUser insertWaitUser = WaitUser.builder()
                 .user(insertUser)
                 .sameNum(0)
                 .grade(insertUser.getGrade())
-                .brandList(brandIdList)
+                .preferBrand(selectInfo.getPreferBrandList())
                 .build();
         waitUsers.add(insertWaitUser);
         for(WaitUser waitUser : waitUsers){
             if(selectInfo.getUserId() == waitUser.getUser().getId()) continue;
-            int sameNum = calculateSameNum(waitUser.getBrandList(), brandIdList);
+            List<Integer> sameNumAndPriority = calculateSameNumAndPriority(waitUser, insertWaitUser);
             WaitUser preferTableUser = new WaitUser(waitUser);
             WaitUser insertPreferTableUser = new WaitUser(insertWaitUser);
-            preferTableUser.setSameNum(sameNum);
-            insertPreferTableUser.setSameNum(sameNum);
+            preferTableUser.setSameNum(sameNumAndPriority.get(0));
+            insertPreferTableUser.setSameNum(sameNumAndPriority.get(0));
+            preferTableUser.setPriority(sameNumAndPriority.get(1));
+            insertPreferTableUser.setPriority(sameNumAndPriority.get(1));
             preferTable.addUser(insertWaitUser.getUser().getId(), preferTableUser);
             preferTable.addUser(waitUser.getUser().getId(), insertPreferTableUser);
         }
