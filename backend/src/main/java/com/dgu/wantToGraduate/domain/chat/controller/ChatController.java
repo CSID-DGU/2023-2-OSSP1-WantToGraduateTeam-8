@@ -1,22 +1,21 @@
 package com.dgu.wantToGraduate.domain.chat.controller;
 
-
-import com.dgu.wantToGraduate.domain.chat.repository.ChatRoomRepository;
-import com.dgu.wantToGraduate.domain.chat.service.ChatService;
+import com.dgu.wantToGraduate.domain.chat.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
-@Slf4j
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class ChatController {
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatService chatService;
-    @PostMapping ("/room/new")
-    public String makeRoom(){
-        return null;
+
+    private final SimpMessageSendingOperations messagingTemplate;
+
+    @MessageMapping("/chat/message")
+    public void message(ChatMessage message) {
+        if (ChatMessage.MessageType.ENTER.equals(message.getType()))
+            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 }
