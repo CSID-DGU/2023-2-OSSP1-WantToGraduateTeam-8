@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 
 public enum BrandCategory {
 
-    /*테스트 데이터셋 입니다.*/
-    //🧑‍💻TODO: 실제 브랜드 데이터 포멧으로 변경
     // 커피점/카페
     CAFE("카페"),
     // 양식
@@ -51,8 +49,4 @@ public enum BrandCategory {
     public String getFootType() {
         return this.foodType;
     }
-
-//    public String getValue() {
-//        return value;
-//    }
 }
