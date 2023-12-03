@@ -6,9 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
-
 public class MatchingDto {
+
     @Getter
     public static class RequestDto{
         private Long userId;
@@ -25,6 +24,14 @@ public class MatchingDto {
     @Builder
     @Getter
     public static class ResponseDto{
+        private Long brandId;
         private List<String> matchList;
+
+//        @Builder
+//        @AllArgsConstructor
+//        @Getter
+//        public static class MatchDto{
+//            private String nickname;
+//        }
     }
 }
