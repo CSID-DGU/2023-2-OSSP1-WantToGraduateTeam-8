@@ -24,15 +24,15 @@ export const Mobile = ({ children }) => {
 
   export default function Login() {
     const { login } = useContext(AuthContext);
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
   
     const handleLogin = () => {
-      const correctUsername = 'abcd'; // 임시 아이디
+      const correctEmail = 'abcd@naver.com'; // 임시 아이디
       const correctPassword = '1234'; // 임시 비밀번호
   
-      if (username === correctUsername && password === correctPassword) {
+      if (email === correctEmail && password === correctPassword) {
         login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경.
   
         // 로그인 성공 시 MainPage로 이동.
@@ -54,9 +54,9 @@ export const Mobile = ({ children }) => {
             </Link> 
           </Logo>
           <LoginSection>
-            <b>ID 로그인</b>
+            <b>이메일 로그인</b>
         <LoginForm>
-          <InputField input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="아이디" />
+          <InputField input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일 ex)user@naver.com" />
           <InputField input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
           <LoginButton onClick={handleLogin}><p>로그인</p></LoginButton>
         </LoginForm>
