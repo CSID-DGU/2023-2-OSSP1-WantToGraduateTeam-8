@@ -1,10 +1,6 @@
 package com.dgu.wantToGraduate.domain.chat.service;
 
-
-import com.dgu.wantToGraduate.domain.chat.model.ChatMessage;
-import com.dgu.wantToGraduate.domain.chat.model.ChatRoom;
 import com.dgu.wantToGraduate.domain.chat.repository.ChatRoomRepository;
-import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -43,21 +39,45 @@ public class ChatService {
         for (Long i = 1L; i <= 3L; i++) {
             userIds.add(i);
         }
-        matchedUser.put(roomId, userIds);
+        boolean makeChat = true;
+        for(Long id : userIds){
+            for(String checkRoomId : matchedUser.keySet()) {
+                for(Long checkId : matchedUser.get(checkRoomId)){
+                    if(checkId == id) makeChat = false;
+                }
+            }
+        }
+        if(makeChat) matchedUser.put(roomId, userIds);
 
         roomId = UUID.randomUUID().toString();
         userIds = new ArrayList<>();
         for (Long i = 4L; i <= 6L; i++) {
             userIds.add(i);
         }
-        matchedUser.put(roomId, userIds);
+        makeChat = true;
+        for(Long id : userIds){
+            for(String checkRoomId : matchedUser.keySet()) {
+                for(Long checkId : matchedUser.get(checkRoomId)){
+                    if(checkId == id) makeChat = false;
+                }
+            }
+        }
+        if(makeChat) matchedUser.put(roomId, userIds);
 
         roomId = UUID.randomUUID().toString();
         userIds = new ArrayList<>();
         for (Long i = 7L; i <= 9L; i++) {
             userIds.add(i);
         }
-        matchedUser.put(roomId, userIds);
+        makeChat = true;
+        for(Long id : userIds){
+            for(String checkRoomId : matchedUser.keySet()) {
+                for(Long checkId : matchedUser.get(checkRoomId)){
+                    if(checkId == id) makeChat = false;
+                }
+            }
+        }
+        if(makeChat) matchedUser.put(roomId, userIds);
     }
 
 }
