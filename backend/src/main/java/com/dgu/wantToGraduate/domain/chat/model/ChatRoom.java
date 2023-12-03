@@ -17,4 +17,11 @@ public class ChatRoom {
         chatRoom.name = name;
         return chatRoom;
     }
+
+    public static ChatRoom createTest(String roomId) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.name = roomId;
+        chatRoom.roomId = roomId;
+        return chatRoom;
+    }
 }

@@ -32,4 +32,10 @@ public class ChatRoomRepository {
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
+
+    public ChatRoom createTestRoom(String roomId) {
+        ChatRoom chatRoom = ChatRoom.createTest(roomId);
+        chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
+        return chatRoom;
+    }
 }
