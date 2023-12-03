@@ -1,10 +1,12 @@
+//Brand.jsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Toggle from '../../components/Toggle';
-
+import axios from 'axios';
+import { useLocation, useParams } from 'react-router-dom';
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
       query: "(max-width:768px)"
@@ -28,54 +30,72 @@ export const Mobile = ({ children }) => {
   }
 
 // 예시 데이터
-const mockBrandList = [
-  { id: 1, name: 'Brand A' },
-  { id: 2, name: 'Brand B' },
-  { id: 3, name: 'Brand C' },
-  { id: 4, name: 'Brand D' },
-  { id: 5, name: 'Brand E' },
-  { id: 6, name: 'Brand F' },
-  { id: 7, name: 'Brand G' },
+// const mockBrandList = [
+//   { id: 1, name: '프랭크버거 동국대점' },
+//   { id: 2, name: '블리스버거 앤 카페' },
+//   { id: 3, name: '버거킹 충무로역점' },
+//   { id: 4, name: '맘스터치 동국대점' },
+//   { id: 5, name: 'KFC 충무로역' },
+//   { id: 6, name: '버거원하우스 장충점' },
+//   { id: 7, name: '노브랜드버거 동국대점' },
   
-];
+  
+// ];
 export default function Brand({ categoryName }) {
   const [brandList, setBrandList] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
-  const navigate = useNavigate(); // useNavigate hook을 사용하여 navigate 함수를 가져옴
-  const [priorityMap, setPriorityMap] = useState({});//우선순위맵
+  const [priorityMap, setPriorityMap] = useState({});
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { category } = useParams();
 
+  //서버
   useEffect(() => {
-    // 실제 서버로부터 데이터를 가져오는 로직이 구현
-    // 여기서 categoryName을 사용하여 해당 카테고리의 브랜드 리스트를 가져온다.
+    const categoryName = location.search.split('=')[1];
     const fetchBrandList = async () => {
       try {
-        // 서버로부터 브랜드 리스트 데이터를 가져오는 API 호출
-        // const response = await fetch(`https://example.com/api/brands/${categoryName}`);
-        // const data = await response.json();
-
-        // 실제 API 호출 결과 대신에 예시 데이터를 사용합니다.
-        const data = mockBrandList;
-
-        setBrandList(data);
+        const response = await axios.get(`http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`);
+        if (response.data && response.data.brandNameList) {
+          setBrandList(response.data.brandNameList.map(brand => ({ name: brand.brandName })));
+          console.log(response.data)
+        }
       } catch (error) {
         console.error('Error fetching brand list:', error);
       }
     };
 
-    fetchBrandList(); // 데이터 가져오는 함수 호출
-  }, [categoryName]);
+    fetchBrandList();
+  }, [location.search]);
+
+  //로컬
+  // useEffect(() => {
+  //   // 실제 서버로부터 데이터를 가져오는 로직이 구현
+  //   // 여기서 categoryName을 사용하여 해당 카테고리의 브랜드 리스트를 가져온다.
+  //   const fetchBrandList = async () => {
+  //     try {
+  //       // 서버로부터 브랜드 리스트 데이터를 가져오는 API 호출
+  //       // const response = await fetch(`https://example.com/api/brands/${categoryName}`);
+  //       // const data = await response.json();
+
+  //       const data = mockBrandList;
+
+  //       setBrandList(data);
+  //     } catch (error) {
+  //       console.error('Error fetching brand list:', error);
+  //     }
+  //   };
+
+  //   fetchBrandList(); // 데이터 가져오는 함수 호출
+  // }, [categoryName]);
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   const groupedBrandList = groupCategories(brandList);
   
-    const handleSelectButtonClick = (brand) => {
-    // 이전 선택된 브랜드에 대한 우선순위 확인
+  const handleSelectButtonClick = (brand) => {
     const brandPriority = priorityMap[brand.id] || null;
 
     if (selectedBrands.includes(brand)) {
-      // 선택 취소 시 priorityMap 업데이트
       const updatedBrands = selectedBrands.filter(item => item !== brand);
       setSelectedBrands(updatedBrands);
-      // 우선순위 삭제
       if (brandPriority) {
         const updatedPriorityMap = { ...priorityMap };
         delete updatedPriorityMap[brand.id];
@@ -84,55 +104,73 @@ export default function Brand({ categoryName }) {
     } else {
       if (selectedBrands.length < 3) {
         setSelectedBrands([...selectedBrands, brand]);
-        // 우선순위 설정
         setPriorityMap({ ...priorityMap, [brand.id]: selectedBrands.length + 1 });
+      } else {
+        alert('3개의 브랜드까지만 선택 가능합니다!');
       }
     }
   };
 
-  const handleMatchingButtonClick = () => {
-    const selectedBrandIds = selectedBrands.map(brand => brand.id);
+  const handleMatchingButtonClick = async () => {
+    if (selectedBrands.length !== 3) {
+      alert('3개의 브랜드를 선택해주세요!');
+    } else {
+      try {
+        const preferBrandList = selectedBrands.map((brand, index) => ({
+          brandName: brand.name,
+          priority: priorityMap[brand.id],
+        }));
 
-    console.log('선택한 브랜드 우선순위:', priorityMap);
+        const data = {
+          userId: 9, // 사용자 ID는 여기서 예시로 9로 설정
+          preferBrandList,
+        };
 
-    // 서버로 선택한 브랜드와 우선순위를 전송
-    // fetch 또는 axios 등을 사용하여 서버에 데이터를 전송하는 로직을 추가
+        const response = await axios.post(
+          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run',
+          data
+        );
 
-    navigate('/matching'); // 
+        console.log('서버 응답:', response.data);
+        navigate('/matching');
+      } catch (error) {
+        console.error('매칭 요청 실패:', error);
+      }
+    }
   };
+
+
   return (
    <>
-        <Mobile>
-          <MobileContainer>
+         <Mobile>
+        <MobileContainer>
           <MobileWrapper>
-            <p>먹고 싶은 브랜드 순서대로 최대 3개를 선택해주세요!</p>
-          <BrandListWrapper>
-          {groupedBrandList.map((group, groupIndex) => (
-      <BrandRow key={groupIndex}>
-        {group.map((brand, brandIndex) => {
-          const brandIsSelected = selectedBrands.includes(brand);
-          const selectedIndex = selectedBrands.indexOf(brand);
-          const buttonText =
-            brandIsSelected && selectedIndex >= 0 ? `선택 ${selectedIndex + 1}` : '선택하기';
+            <p>먹고 싶은 브랜드 순서대로 3개를 선택해주세요!</p>
+            <BrandListWrapper>
+                    {groupedBrandList.map((group, groupIndex) => (
+          <BrandRow key={groupIndex}>
+            {group.map((brand, brandIndex) => {
+              const brandIsSelected = selectedBrands.includes(brand);
+              const selectedIndex = selectedBrands.indexOf(brand);
+              const buttonText = brandIsSelected && selectedIndex >= 0 ? `선택 ${selectedIndex + 1}` : '선택하기';
 
-          return (
-            <BrandSet key={brandIndex} onClick={() => handleSelectButtonClick(brand)}>
-              <BrandItem key={brand.id}>{brand.name}</BrandItem>
-              <SelectButton isSelected={brandIsSelected}>{buttonText}</SelectButton>
-            </BrandSet>
-          );
-        })}
-      </BrandRow>
+              return (
+                <BrandSet key={brandIndex} onClick={() => handleSelectButtonClick(brand)}>
+                  <BrandItem>{brand.name}</BrandItem> {/* brand.name 대신 brand.brandName으로 수정 */}
+                  <SelectButton isSelected={brandIsSelected}>{buttonText}</SelectButton>
+                </BrandSet>
+              );
+            })}
+          </BrandRow>
         ))}
             </BrandListWrapper>
           </MobileWrapper>
           <FixedButton>
-          <MatchingButton onClick={handleMatchingButtonClick}>매칭하기</MatchingButton>
-      </FixedButton>
-          </MobileContainer>
-          <Toggle/>
-        </Mobile>
-
+            <MatchingButton onClick={handleMatchingButtonClick}>매칭하기</MatchingButton>
+          </FixedButton>
+        </MobileContainer>
+        <Toggle />
+      </Mobile>
 
         <Pc>
             <PcWrapper>
@@ -200,6 +238,7 @@ const BrandSet = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+  text-align : center;
   margin-left: 1rem;
   margin-right: 3rem;
   padding: 2.4375rem 0rem 0rem 0rem;
@@ -221,7 +260,8 @@ const BrandSet = styled.div`
 `;
 
 const SelectButton = styled.button`
-  margin-top: 2rem;
+  position : absolute;
+  margin-top: 3.5rem;
   background: ${props => (props.isSelected ? '#a3b6e9' : '#FF7062')};
   border: none;
   width: 8rem;
@@ -241,12 +281,13 @@ const SelectButton = styled.button`
 
 const FixedButton = styled.div`
   position: fixed;
-  bottom: 0px;
- 
+  bottom: 20px;
+
+
 `;
 
 const MatchingButton = styled.button`
- background: #F1E050;
+  background: #F1E050;
   border: none;
   width: 24rem;
   height: 4.6875rem;
@@ -259,6 +300,7 @@ const MatchingButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease-in-out;
 
   &:hover {
     background: #EDE493;
