@@ -5,6 +5,7 @@ import com.dgu.wantToGraduate.domain.brand.repository.BrandRepository;
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto;
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.RequestDto;
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.RequestDto.SelectDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.ResponseDto.MatchDto;
 import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
 import com.dgu.wantToGraduate.domain.matching.repository.BrandQueue;
 import com.dgu.wantToGraduate.domain.matching.repository.PreferBrandRepository;
@@ -12,16 +13,18 @@ import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.Select;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+
+
 public class MatchingService {
+    public static int totalScore = 0;
+    public static int totalGroupCnt=0;
 
     private final BrandQueue brandQueue;
     private final UserRepository userRepository;
@@ -29,6 +32,8 @@ public class MatchingService {
     private final PreferBrandRepository preferBrandRepository;
 
     public MatchingDto.ResponseDto matching(RequestDto selectInfo){
+        totalGroupCnt++; // 3000명 카운팅
+
         MatchingDto.ResponseDto matchingResult = null;
 
         log.info("[MatchingService] 진입");
@@ -92,5 +97,32 @@ public class MatchingService {
         }else {
             throw new IllegalArgumentException("[예외발생]해당 브랜드가 없습니다.");
         }
+    }
+
+
+    public void testEvaluatePriority(MatchingDto.ResponseDto matchingResult){
+
+
+        int groupScore=0;
+        int maxScore=0;
+        List<MatchDto> matchList = matchingResult.getMatchList();
+        maxScore += matchList.size() * 3; // 최대 점수 계산(매칭그룹 * 3 : 항상 3명 매칭 가정)
+
+        for(MatchDto user : matchList){
+            String nickname = user.getNickname();
+            List<PreferBrand>user_preferBrandList = preferBrandRepository.findByUserNickname(nickname);
+
+            for(PreferBrand user_preferBrand : user_preferBrandList){
+                if(user_preferBrand.getBrand().getId() == matchingResult.getBrandId()){
+                    if(user_preferBrand.getPriority()==1) groupScore+=3;
+                    else if(user_preferBrand.getPriority()==2) groupScore+=2;
+                    else if(user_preferBrand.getPriority()==3) groupScore+=1;
+                }
+            }
+        }
+
+        double percentage = (double) groupScore / maxScore * 100;
+        log.info("[그룹당 우선순위 반영 비율] percentage per group: {}", percentage);
+        totalScore += groupScore;
     }
 }
