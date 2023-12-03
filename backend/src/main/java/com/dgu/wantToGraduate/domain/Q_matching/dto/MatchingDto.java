@@ -1,4 +1,4 @@
-package com.dgu.wantToGraduate.domain.matching.dto;
+package com.dgu.wantToGraduate.domain.Q_matching.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,6 @@
-package com.dgu.wantToGraduate.domain.matching.repository;
+package com.dgu.wantToGraduate.domain.Q_matching.repository;
 
-import com.dgu.wantToGraduate.domain.brand.entity.Brand;
-import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
+import com.dgu.wantToGraduate.domain.Q_matching.entity.PreferBrand;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
