@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +34,10 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     private List<PreferBrand> preferBrandList=new ArrayList<>();
-//    @ManyToOne
-//    @JoinColumn(name="preferBrand_id")
-//    private PreferBrand preferBrand;
 
     @Builder
     public Brand(String brandName, BrandCategory brandCategory){
         this.brandName=brandName;
         this.brandCategory=brandCategory;
     }
-
-
 }
