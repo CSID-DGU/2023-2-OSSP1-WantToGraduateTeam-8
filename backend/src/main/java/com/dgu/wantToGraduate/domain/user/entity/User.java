@@ -2,7 +2,7 @@ package com.dgu.wantToGraduate.domain.user.entity;
 
 import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 import com.dgu.wantToGraduate.domain.chat.entity.ChatRoom;
-import com.dgu.wantToGraduate.domain.Q_matching.entity.PreferBrand;
+import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.dgu.wantToGraduate.domain.Q_matching.entity;
+package com.dgu.wantToGraduate.domain.matching.entity;
 
 import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 import com.dgu.wantToGraduate.domain.brand.entity.Brand;

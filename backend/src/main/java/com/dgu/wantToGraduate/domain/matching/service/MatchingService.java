@@ -1,14 +1,14 @@
-package com.dgu.wantToGraduate.domain.Q_matching.service;
+package com.dgu.wantToGraduate.domain.matching.service;
 
 import com.dgu.wantToGraduate.domain.brand.entity.Brand;
 import com.dgu.wantToGraduate.domain.brand.repository.BrandRepository;
-import com.dgu.wantToGraduate.domain.Q_matching.dto.MatchingDto;
-import com.dgu.wantToGraduate.domain.Q_matching.dto.MatchingDto.RequestDto;
-import com.dgu.wantToGraduate.domain.Q_matching.dto.MatchingDto.RequestDto.SelectDto;
-import com.dgu.wantToGraduate.domain.Q_matching.dto.MatchingDto.ResponseDto.MatchDto;
-import com.dgu.wantToGraduate.domain.Q_matching.entity.PreferBrand;
-import com.dgu.wantToGraduate.domain.Q_matching.repository.BrandQueue;
-import com.dgu.wantToGraduate.domain.Q_matching.repository.PreferBrandRepository;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.RequestDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.RequestDto.SelectDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.ResponseDto.MatchDto;
+import com.dgu.wantToGraduate.domain.matching.entity.PreferBrand;
+import com.dgu.wantToGraduate.domain.matching.repository.BrandQueue;
+import com.dgu.wantToGraduate.domain.matching.repository.PreferBrandRepository;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

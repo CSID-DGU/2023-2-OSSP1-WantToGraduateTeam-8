@@ -1,4 +1,4 @@
-package com.dgu.wantToGraduate.domain.Q_matching.repository;
+package com.dgu.wantToGraduate.domain.matching.repository;
 
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import lombok.Getter;
