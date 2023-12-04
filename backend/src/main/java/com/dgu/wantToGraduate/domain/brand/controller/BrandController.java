@@ -15,7 +15,7 @@ public class BrandController {
     private final BrandService brandService;
     @GetMapping("/list/all")
     public ResponseEntity<?> getBrandList(@RequestParam("category") String category){
-
+        log.info("getBrandList 진입");
         return ResponseEntity.ok(brandService.searchAll(category));
     }
 
