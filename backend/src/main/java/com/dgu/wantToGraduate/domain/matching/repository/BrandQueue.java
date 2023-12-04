@@ -67,6 +67,13 @@ public class BrandQueue {
             List<WaitUser> matchedUsers = storeUsers.get(brandId).stream()
                     .limit(3)
                     .collect(Collectors.toList());
+
+            //매칭된 유저 PreferBrand 에서 삭제
+            matchedUsers.forEach(matchedUser -> {
+                log.info("[Delete Test Log] : userId is {} - brandId is {}", matchedUser.getUser().getId(), brandId);
+                preferBrandRepository.deleteByUser(matchedUser.getUser().getId());
+            });
+
             for (Long key : storeUsers.keySet()) {
                 List<Long> removeUserIds = matchedUsers.stream()
                         .map(WaitUser::getUser)

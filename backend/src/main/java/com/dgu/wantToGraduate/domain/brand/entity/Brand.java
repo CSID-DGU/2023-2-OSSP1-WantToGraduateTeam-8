@@ -21,9 +21,9 @@ public class Brand {
     @Column(name= "brand_id")
     private Long id;
 
-    @OneToMany(mappedBy = "brand")
-    @Column(nullable = true)
-    private List<Menu> menu=new ArrayList<>();
+//    @OneToMany(mappedBy = "brand")
+//    @Column(nullable = true)
+//    private List<Menu> menu=new ArrayList<>();
 
     @Column(nullable = false)
     private String brandName;
