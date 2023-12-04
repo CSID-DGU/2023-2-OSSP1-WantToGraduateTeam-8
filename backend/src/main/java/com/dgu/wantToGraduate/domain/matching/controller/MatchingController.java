@@ -18,7 +18,7 @@ import static com.dgu.wantToGraduate.domain.matching.service.MatchingService_Q_v
 public class MatchingController {
 
     private final MatchingService matchingService;
-    private final MatchingService_Q_version m0atchingServiceQversion;
+    private final MatchingService_Q_version matchingServiceQversion;
 
     @PostMapping("/run/v2")
     public ResponseEntity<?> match(@RequestBody MatchingDto.RequestDto requestDto) {
@@ -30,8 +30,8 @@ public class MatchingController {
 
     @PostMapping("/run/v1")
     public ResponseEntity<?> q_match(@RequestBody MatchingDto.RequestDto requestDto){
-        MatchingDto.ResponseDto matching = m0atchingServiceQversion.matching(requestDto);
-        if(matching != null) m0atchingServiceQversion.testEvaluatePriority(matching);
+        MatchingDto.ResponseDto matching = matchingServiceQversion.matching(requestDto);
+        if(matching != null) matchingServiceQversion.testEvaluatePriority(matching);
         log.info("[최종요소]\nToTscore: {} \n ToTcnt : {}", totalScore, totalGroupCnt);
         if(totalGroupCnt>=3000) {
             log.info("[최종] matching: {}", (double)totalScore/9000*100);

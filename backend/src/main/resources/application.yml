@@ -17,3 +17,8 @@ logging:
     com:
       dgu:
         wantToGraduate=DEBUG:
+
+##jwt
+jwt:
+  ##TODO: 테스팅 후 외부 설정으로 돌리기
+  secret-key: ${SECRET_KEY}
