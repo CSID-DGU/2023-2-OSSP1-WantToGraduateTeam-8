@@ -28,7 +28,7 @@ export default function App() {
           </>
         )}
         <Route path="/main" element={<MainPage />} />
-        <Route path="/brand" element={<Brand />} />
+        <Route path="/brand/list/all" element={<Brand />} />
         <Route path="/matching" element={<Matching />} />
         <Route path="/chatting" element={<Chatting />} />
         <Route path="/mypage" element={<Mypage />} />
