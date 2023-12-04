@@ -7,8 +7,18 @@ spring:
     password: ${PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+logging:
+  level:
+    com:
+      dgu:
+        wantToGraduate=DEBUG:
+
+##jwt
+jwt:
+  ##TODO: 테스팅 후 외부 설정으로 돌리기
+  secret-key: ${SECRET_KEY}
