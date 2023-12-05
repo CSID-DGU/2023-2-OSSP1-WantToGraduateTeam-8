@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -20,14 +21,12 @@ export const Mobile = ({ children }) => {
     return <>{isPc && children}</>
   }
 
-
-
   export default function Login() {
     const { login } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-  
+
     const handleLogin = () => {
       const correctEmail = 'abcd@naver.com'; // 임시 아이디
       const correctPassword = '1234'; // 임시 비밀번호
@@ -41,8 +40,40 @@ export const Mobile = ({ children }) => {
         alert('아이디 혹은 비밀번호가 틀립니다.');
       }
     };
-  
+
+    // 아래의 코드를 활용할 예정
+    /*const correctEmail = 'abcd@naver.com'; // ovg07047@naver.com
+    const correctPassword = '1234'; // 1
     
+    const handleLogin = () => {
+    
+        if(email === "") {
+          alert("아이디를 입력해주세요.");
+        } else if (password === "") {
+          alert("비밀번호를 입력해주세요.")
+        } else {
+          axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login', {
+            email,
+            password
+        })
+        .then(res => {
+            localStorage.setItem('accessToken', res.data.accessToken);
+
+            return res.data.accessToken;
+
+            // header에 토큰 넣는 로직
+            setInterceptor(res.data.userToken);
+            login();
+            navigate('/main');
+        })
+        .catch(err => {
+          alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        })
+        // login();
+        // navigate('/main');
+        }
+      };*/
+
   return (
    <>
         <Mobile>
@@ -77,6 +108,14 @@ export const Mobile = ({ children }) => {
   )
 }
 
+export const setInterceptor = (token) => {
+
+  if (!token) return false
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  return true
+
+}
+
 const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
@@ -105,7 +144,6 @@ margin-top : 10.06rem;
 `
 
 const Logo = styled.div`
-margin-right : 1rem;
 img{
   width: 8.8125rem;
   height: 4.5625rem;
@@ -141,11 +179,13 @@ const LoginForm = styled.form`
 `;
 
 const InputField = styled.input`
-  width: 18.75rem;
+  width: 18.25rem;
   height: 3.125rem;
   border-radius: 0.9375rem;
   margin-bottom : 0.3rem;
   border: 1px solid #7D7D7D;
+  padding-left : 0.5rem;
+  font-size : 1.0625rem;
 `;
 
 const LoginButton = styled.button`

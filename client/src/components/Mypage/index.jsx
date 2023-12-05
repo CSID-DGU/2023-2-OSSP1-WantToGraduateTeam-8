@@ -19,12 +19,16 @@ export default function Mypage() {
   const { logout } = useContext(AuthContext);
 
   const handleRevise = () => {
-    const accountnumRegex = /^(?=[0-9]){16}$/;
+    const accountnumRegex = /^(?=[0-9]{16})[0-9]{16}$/;
     const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/; 
 
     if (!accountnumRegex.test(accountnum)) {
-      window.alert('계좌번호는 숫자만 입력해야 합니다.');
-    } else if (!passwordRegex.test(password)) {
+      window.alert('계좌번호는 16개의 숫자만 입력해야 합니다.');
+    } else {
+      window.alert('개인정보가 수정되었습니다.');
+    }
+    
+    if (!passwordRegex.test(password)) {
       window.alert('비밀번호는 4자 이상의 문자 혹은 숫자를 포함해야 합니다.');
     } else {
       window.alert('개인정보가 수정되었습니다.');
@@ -179,6 +183,7 @@ margin-top : 0.25rem;
 padding-left : 1rem;
 padding-right : 1rem;
 border: 2px solid #7D7D7D;
+font-size : 1.0625rem;
 `
 
 const MyReview = styled.div`

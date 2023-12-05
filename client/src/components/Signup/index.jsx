@@ -190,11 +190,13 @@ const InputFieldRow = styled.div`
 `;
 
 const InputField = styled.input`
-  width: 18.75rem;
+  width: 18.25rem;
   height: 3.125rem;
   border-radius: 0.9375rem;
   border: 1px solid #7D7D7D;
   margin-bottom:0.1rem;
+  padding-left : 0.5rem;
+  font-size : 1rem;
   &:nth-child(2) {
     margin-bottom: 0.6rem;
   }
