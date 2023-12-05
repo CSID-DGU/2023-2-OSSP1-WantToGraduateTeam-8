@@ -1,8 +1,7 @@
 package com.dgu.wantToGraduate.domain.chat.controller;
 
-import com.dgu.wantToGraduate.domain.chat.model.ChatRoom;
-import com.dgu.wantToGraduate.domain.chat.repository.ChatRoomRepository;
-import com.dgu.wantToGraduate.domain.chat.service.ChatService;
+import com.dgu.wantToGraduate.domain.chat.model.ChatRoomDto;
+import com.dgu.wantToGraduate.domain.chat.service.ChatRoomService;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,21 +20,20 @@ import java.util.Map;
 @Slf4j
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
-    private final ChatService chatService;
+    private final ChatRoomService chatRoomService;
 
     @GetMapping("/main")
     public String start() {
-        chatService.setTestUser();
-        chatService.createTestChatRoom();
+        chatRoomService.setTestUser();
+        chatRoomService.createChatRoom();
         return "chat/start";
     }
 
     @GetMapping("/main/{userId}")
     public ResponseEntity<Map<String, String>> enterChatRoom(@PathVariable String userId) {
         log.info(userId);
-        String roomId = chatService.findRoomIdByUserId(Long.parseLong(userId));
+        String roomId = chatRoomService.findRoomIdByUserId(Long.parseLong(userId));
         String nickName = userRepository.findById(Long.parseLong(userId)).get().getNickname();
         Map<String, String> result = new HashMap<>();
         result.put("roomId", roomId);
@@ -45,8 +43,8 @@ public class ChatRoomController {
 
     @GetMapping("/rooms")
     @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+    public List<ChatRoomDto> room() {
+        return chatRoomService.findAllRoom();
     }
 
     @GetMapping("/room/enter/{roomId}")
@@ -56,7 +54,7 @@ public class ChatRoomController {
 
     @GetMapping("/room/{roomId}")
     @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+    public ChatRoomDto roomInfo(@PathVariable String roomId) {
+        return chatRoomService.findRoomById(roomId);
     }
 }

@@ -2,12 +2,20 @@ package com.dgu.wantToGraduate.domain.chat.entity;
 
 import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 import com.dgu.wantToGraduate.domain.user.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatRoom extends BaseTimeEntity {
 
     @Id
@@ -26,5 +34,5 @@ public class ChatRoom extends BaseTimeEntity {
     List<User> users = new ArrayList<User>();
 
     @Column(nullable = false)
-    private String roomName;
+    private String roomId;
 }

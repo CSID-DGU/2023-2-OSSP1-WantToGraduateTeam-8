@@ -1,11 +1,15 @@
 package com.dgu.wantToGraduate.domain.chat.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatMessage {
+@AllArgsConstructor
+@Builder
+public class ChatMessageDto {
 
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
