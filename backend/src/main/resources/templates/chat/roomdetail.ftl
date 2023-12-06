@@ -8,10 +8,9 @@
         .MobileContainer{
             display: flex;
             flex-direction: column;
-            justify-content: center;
+
             align-items: center;
         }
-
         .MobileWrapper{
             display : flex;
             flex-direction : column;
@@ -20,7 +19,11 @@
             height: 52.75rem;
             flex-shrink: 0;
             background: #FFF;
-            border : 1px solid black;
+        }
+        .Header{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .Room{
             display: flex;
@@ -33,23 +36,26 @@
             font-style: normal;
             font-weight: 600;
         }
-        .ChatWrapper{
-            display : flex;
-            flex-direction : column;
+        .ChatWrapper {
+            display: flex;
+            flex-direction: column;
+            position : relative;
+
             width: 20.8125rem;
             height: 40.5625rem;
             border-radius: 0.9375rem;
-            border: 1.5px solid #FF7062;
-            align-items : center;
+            border: 2px solid #FF7062;
+            text-align: right;
             background: #FFF;
-            margin-top : 1.25rem;
+            margin-top: 1.25rem;
+            overflow-y: auto; /* 스크롤 추가 */
         }
         .ButtonSection{
             display : flex;
             flex-direction: row;
             padding: 0.5rem;
 
-            width: 20.8rem;
+            width: 20rem;
             height: 2.375rem;
             flex-shrink: 0;
             border-radius: 0.9375rem;
@@ -70,7 +76,6 @@
         .btn{
             margin-top: 0.2rem;
             display:flex;
-
             flex-direction: column;
             align-items: center;
             text-align: center;
@@ -85,7 +90,6 @@
             font-size: 1.1rem;
             font-style: normal;
             font-weight: 600;
-
         }
         .exitButton{
             margin-top: 0.2rem;
@@ -104,74 +108,83 @@
             font-size: 0.8rem;
             font-style: normal;
             font-weight: 600;
-
         }
-        .list-group{
+        .list-group {
             display: flex;
             flex-direction: column;
             position: relative;
+            padding: 0; /* 기본 패딩 제거 */
+            margin: 0; /* 기본 마진 제거 */
         }
-        .Sender{
-            display: flex;
-            flex-direction: column;
-            display: inline-flex;
-            border-radius: 1.875rem;
-            justify-content: center;
-            align-items: center;
-            margin-right : 15rem;
-            font-size: 0.4rem;
-            font-style: normal;
-            font-weight: 600;
-
-
+        .Sender {
+            margin-left: auto;
+            margin-top: 0.5rem; /* 이동 */
+            font-size: 0.8rem; /* 이동 */
+            font-weight: 600; /* 이동 */
         }
-        .Message{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .Message {
             display: inline-block;
-            position: relative;
-            padding: 0.2rem;
+            position : relative;
+            padding: 0.5rem;
+            margin-top: 0.25rem;
             border-radius: 1.875rem;
-            background: #F1E050;
             font-size: 0.8rem;
             font-style: normal;
             font-weight: 600;
         }
-
+        /*내 메세지*/
+        .Message.mine {
+            background-color: #F1E050;
+        }
+        /* 내 닉네임 */
+        .Sender.mine {
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        /* 다른 사용자의 메시지 */
+        .Message.other {
+            text-align: left;
+            width:max-content;
+            background-color: #BCF0A9;
+            margin-right: 90% ; /* 오른쪽 여백 설정 */
+        }
+        /* 다른 사용자의 이름 */
+        .Sender.other {
+            text-align: left;
+            margin-right: auto;
+            margin-top: 0.5rem; /* 이동 */
+            font-size: 0.8rem; /* 이동 */
+            font-weight: 600; /* 이동 */
+        }
     </style>
 </head>
 <body>
 <div class="MobileContainer" id="app">
     <div class="MobileWrapper">
         <div class="ChatWrapper">
-            <div class="Room">
-                {{room.name}}
+            <div class="Header">
+                <div class="Room">
+                    {{room.name}}
+                </div>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item" v-for="message in messages">
-                    <div class="Sender">
+                    <div :class="[(message.sender === sender) ? 'Sender mine' : 'Sender other']">
                         {{message.sender}}
                     </div>
-                    <div class="Message">
+                    <div :class="[(message.sender === sender) ? 'Message mine' : 'Message other']">
                         {{message.message}}
                     </div>
-
                 </li>
             </ul>
-
         </div>
         <div class="ButtonSection">
             <button class="exitButton" type="button">나가기</button>
             <input type="text" class="form-control" v-model="message" @keyup.enter="sendMessage">
             <button class="btn btn-primary" type="button" @click="sendMessage">&#10148</button>
-
         </div>
     </div>
-
-
 </div>
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
@@ -213,6 +226,7 @@
                     .catch(error => {
                         console.error('Error fetching chat room:', error);
                     });
+                this.$forceUpdate();
             },
             sendMessage: function () {
                 ws.send("/pub/chat/message", {}, JSON.stringify({
@@ -224,11 +238,12 @@
                 this.message = '';
             },
             recvMessage: function (recv) {
-                this.messages.unshift({
+                this.messages.push({
                     "type": recv.type,
-                    "sender": recv.type == 'ENTER' ? '[알림]' : recv.sender,
+                    "sender": recv.sender,
                     "message": recv.message
-                })
+                });
+                this.$forceUpdate();
             }
         }
     });
@@ -238,11 +253,6 @@
             var recv = JSON.parse(message.body);
             vm.recvMessage(recv);
         });
-        ws.send("/pub/chat/message", {}, JSON.stringify({
-            type: 'ENTER',
-            roomId: vm.$data.roomId,
-            sender: vm.$data.sender
-        }));
     }, function (error) {
         alert("error " + error);
     });

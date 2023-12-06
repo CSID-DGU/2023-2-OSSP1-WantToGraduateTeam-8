@@ -105,7 +105,6 @@
                 }
                 axios.get('/chat/main/' + this.user_id)
                     .then(response => {
-
                         var roomId = response.data.roomId;
                         var nickName = response.data.nickName;
                         localStorage.setItem("wschat.sender", nickName);
