@@ -91,25 +91,26 @@ export default function Brand({ categoryName }) {
   const groupedBrandList = groupCategories(brandList);
   
   const handleSelectButtonClick = (brand) => {
-    const brandPriority = priorityMap[brand.id] || null;
-
+    const brandPriority = priorityMap[brand.name] || null;
+  
     if (selectedBrands.includes(brand)) {
       const updatedBrands = selectedBrands.filter(item => item !== brand);
       setSelectedBrands(updatedBrands);
       if (brandPriority) {
         const updatedPriorityMap = { ...priorityMap };
-        delete updatedPriorityMap[brand.id];
+        delete updatedPriorityMap[brand.name];
         setPriorityMap(updatedPriorityMap);
       }
     } else {
       if (selectedBrands.length < 3) {
         setSelectedBrands([...selectedBrands, brand]);
-        setPriorityMap({ ...priorityMap, [brand.id]: selectedBrands.length + 1 });
+        setPriorityMap({ ...priorityMap, [brand.name]: selectedBrands.length + 1 });
       } else {
         alert('3개의 브랜드까지만 선택 가능합니다!');
       }
     }
   };
+  
 
   const handleMatchingButtonClick = async () => {
     if (selectedBrands.length !== 3) {
@@ -118,16 +119,16 @@ export default function Brand({ categoryName }) {
       try {
         const preferBrandList = selectedBrands.map((brand, index) => ({
           brandName: brand.name,
-          priority: priorityMap[brand.id],
+          priority: priorityMap[brand.name],
         }));
 
         const data = {
-          userId: 9, // 사용자 ID는 여기서 예시로 9로 설정
+          userId: 3, // 사용자 ID는 여기서 예시로 9로 설정
           preferBrandList,
         };
-
+        console.log('보내는 데이터:', data); // 여기서 데이터를 콘솔에 출력
         const response = await axios.post(
-          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run',
+          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/v1',
           data
         );
 
@@ -138,7 +139,7 @@ export default function Brand({ categoryName }) {
       }
     }
   };
-
+  
 
   return (
    <>
