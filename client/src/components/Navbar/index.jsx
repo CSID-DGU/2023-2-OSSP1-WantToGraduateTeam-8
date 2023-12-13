@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { useState } from "react";
+import { useState} from "react";
 import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import SearchImg from '../../assets/imgs/search_image.svg'
 import { AuthContext } from '../Login/AuthContext'; 
 
@@ -25,10 +25,11 @@ export const Mobile = ({ children }) => {
 
 export default function Navbar() {
   const { logout } = useContext(AuthContext); // AuthContext에서 logout 함수 가져오기
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout(); // 로그아웃 함수 호출
-    window.location.href = '/'; // '/main' 페이지로 이동
+    navigate('/') // '/main' 페이지로 이동
   };
   return (
    <>

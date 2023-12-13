@@ -9,17 +9,16 @@ export default function RateStar({ sendStarCount }) {
 
   const handleStarCnt = (i) => {
     setStarCnt(i + 1); // 선택된 별점 개수 설정
-    sendStarCount(i + 1); // 선택된 별점 개수를 상위 컴포넌트로 보냄
+    sendStarCount(i + 1); // 부모 컴포넌트에 선택된 별점 개수 전달
   };
-
   
   return (
     <RateStarWrapper>
-    {countArr.map((_, i) => (
-      <OneStar key={i} handleStarCnt={() => handleStarCnt(i)} isFill={i < starCnt} />
-    ))}
-  </RateStarWrapper>
-  )
+      {countArr.map((_, i) => (
+        <OneStar key={i} handleStarCnt={() => handleStarCnt(i)} isFill={i < starCnt} />
+      ))}
+    </RateStarWrapper>
+  );
 }
 
 const RateStarWrapper = styled.div`
