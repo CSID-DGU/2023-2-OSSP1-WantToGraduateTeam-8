@@ -29,7 +29,8 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout(); // 로그아웃 함수 호출
-    window.location.href = '/'; // '/main' 페이지로 이동
+    localStorage.removeItem('accessToken');
+    navigate('/'); // '/main' 페이지로 이동
   };
   return (
    <>
