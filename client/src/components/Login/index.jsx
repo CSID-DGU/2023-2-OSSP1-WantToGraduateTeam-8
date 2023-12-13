@@ -23,56 +23,95 @@ export const Mobile = ({ children }) => {
 
   export default function Login() {
     const { login } = useContext(AuthContext);
+    const { logout } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = () => {
+    /*
+   const handleLogin = () => {
       const correctEmail = 'abcd@naver.com'; // 임시 아이디
       const correctPassword = '1234'; // 임시 비밀번호
   
       if (email === correctEmail && password === correctPassword) {
+        localStorage.setItem('accessToken', 'AccessConfirmed');
+        
         login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경.
-  
+        
         // 로그인 성공 시 MainPage로 이동.
         navigate('/main');
       } else {
+        navigate('/login');
         alert('아이디 혹은 비밀번호가 틀립니다.');
       }
     };
+    */
 
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      if(email === ""){
+        alert("아이디를 입력해주세요.");
+      } else if (password === "") {
+        alert("비밀번호를 입력해주세요.")
+      } else {
+        try {
+          const res = await axios.post("http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login", {
+            email, 
+            password,
+          });
+          alert(JSON.stringify(res.data));
+         const accessToken = res.data.accessToken;
+
+      // 토큰 저장
+          localStorage.setItem("accessToken", accessToken);
+          login();
+          navigate('/main');
+        } catch (err) {
+          navigate('/login');
+          alert("로그인 실패" , err);
+        }
+      }
+    }
+    
+    /*
     // 아래의 코드를 활용할 예정
-    /*const correctEmail = 'abcd@naver.com'; // ovg07047@naver.com
+    const correctEmail = 'abcd@naver.com'; // ovg07047@naver.com
     const correctPassword = '1234'; // 1
     
-    const handleLogin = () => {
     
-        if(email === "") {
+    const handleLogin = () => {
+        if(email === ""){
           alert("아이디를 입력해주세요.");
         } else if (password === "") {
           alert("비밀번호를 입력해주세요.")
         } else {
           axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login', {
             email,
-            password
-        })
-        .then(res => {
-            localStorage.setItem('accessToken', res.data.accessToken);
+            password,
+          })
+          .then(res => {
+              //localStorage.setItem('accessToken', res.data.accessToken);
 
-            return res.data.accessToken;
-
-            // header에 토큰 넣는 로직
-            setInterceptor(res.data.userToken);
-            login();
-            navigate('/main');
-        })
-        .catch(err => {
-          alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-        })
-        // login();
-        // navigate('/main');
+              // header에 토큰 넣는 로직
+              //setInterceptor(res.data.userToken);
+              //login();   // 해당 위치에서 실행이 아니되면 아래 위치로 이동
+              //navigate('/main');   // 해당 위치에서 실행이 아니되면 아래 위치로 이동
+             
+              //return res.data.accessToken;
+          })
+          .catch(err => {
+            //navigate('/login');
+            //localStorage.removeItem('accessToken');
+          });
         }
-      };*/
+
+        if(localStorage.getItem('accessToken') !== null)
+        {
+          login();
+          navigate('/main');
+        }
+      };
+      */
 
   return (
    <>

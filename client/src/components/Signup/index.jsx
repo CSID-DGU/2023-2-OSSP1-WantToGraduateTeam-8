@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 export const Mobile = ({ children }) => {
@@ -49,10 +50,26 @@ export default function Signup() {
     } else if (!validateEmail(email)) {
       window.alert('올바른 이메일 형식이 아닙니다.');
     } else {
-      window.alert('회원가입이 완료되었습니다.');
+      axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/join', {
+        nickname : nickname,  
+        email : email,
+        password : password,
+        account_number : account_number,
+    })
+    .then(res => {
+      if(res.data.nickname !== null){
+        navigate("/login");
+      }
+    })
+    .catch(err => {
+      alert('다시 회원가입해주시기 바랍니다.');
+    });
+    
+    alert("회원가입이 완료되었습니다.");
+    // navigate("/login");
       // 서버로 회원가입 정보를 전송하고 처리하는 로직이 추가되어야 함.
       // 회원가입 완료 후 로그인 창으로 이동
-      navigate('/login');
+      // navigate('/login');
     }
 
     const newMember = { nickname, password, account_number, email };

@@ -28,6 +28,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout(); // 로그아웃 함수 호출
+    localStorage.removeItem("accessToken");   // 로그아웃 시 토큰 삭제
     window.location.href = '/'; // '/main' 페이지로 이동
   };
   return (
