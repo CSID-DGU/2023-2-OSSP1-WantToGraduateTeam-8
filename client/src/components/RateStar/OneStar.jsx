@@ -1,3 +1,4 @@
+//OnewStar.jsx
 import React, { useEffect, useState } from 'react'
 
 export default function OneStar({handleStarCnt, isFill}) { 

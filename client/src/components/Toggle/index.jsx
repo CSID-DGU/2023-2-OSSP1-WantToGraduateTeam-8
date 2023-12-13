@@ -58,6 +58,7 @@ const ToggleButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom : 2rem;
   font-size: 24px;
   cursor: pointer;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);

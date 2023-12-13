@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .chat-container {
+            border: 1px solid #ccc;
+            width: 400px;
+            height: 400px;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .my-message {
+            align-self: flex-end;
+            background-color: #DCF8C6;
+        }
+
+        .other-message {
+            align-self: flex-start;
+            background-color: #E8E8E8;
+        }
+
+        .input-container {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .input-message {
+            flex: 1;
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+        }
+
+        .send-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <div class="message my-message">
+            My message
+        </div>
+        <div class="message other-message">
+            Other user's message
+        </div>
+        <!-- 여기서부터는 새로운 메시지를 추가할 부분입니다 -->
+    </div>
+    <div class="input-container">
+        <input type="text" class="input-message" id="messageInput">
+        <button class="send-button" onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const chatContainer = document.getElementById("chatContainer");
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== "") {
+                const messageDiv = document.createElement("div");
+                messageDiv.textContent = messageText;
+                messageDiv.classList.add("message", "my-message");
+                chatContainer.appendChild(messageDiv);
+                messageInput.value = "";
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
