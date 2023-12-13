@@ -1,3 +1,4 @@
+//nickname grade comment
 import React, { useContext } from 'react';
 import { useState } from "react";
 import styled from 'styled-components'
@@ -7,49 +8,118 @@ import { AuthContext } from '../Login/AuthContext'
 import {ReactComponent as Delishare} from '../../assets/imgs/Delishare_mobile_logo.svg'
 import SearchImg from '../../assets/imgs/search_image.svg'
 import Stars from '../../assets/imgs/ProfileStars.png'
-import ProfileImg from "../../assets/imgs/profile_pink.png"
 import Toggle from '../Toggle';
 import RateStar from '../RateStar/RateStar';
+import { useNavigate } from 'react-router-dom';
 
+export const Mobile = ({ children }) => {
+  const isMobile = useMediaQuery({
+    query: "(max-width:768px)"
+  });
+  return <>{isMobile && children}</>
+}
+
+export const Pc = ({ children }) => {
+  const isPc = useMediaQuery({
+    query: "(min-width:769px)"
+  });
+  return <>{isPc && children}</>
+}
 export default function Review() {
 
-    const [review, submitReview] = useState('');
+  const [comment, setComment] = useState('');
+  const navigate = useNavigate();
+  const [partnerNames, setPartnerNames] = useState(['User1', 'User2']); // 임시로 닉네임 정의
+  const [partnerReviews, setPartnerReviews] = useState(['', '']); // 상대방 리뷰
+  const [starCounts, setStarCounts] = useState([0, 0]); // 각 사용자의 별점
 
-    const handleSubmit = () => {
-      window.alert('개인정보가 수정되었습니다.');
-      // 서버로 개인정보를 전송하고 처리하는 로직이 추가되어야 함.
-      window.location.href = '/main';
-      const newMember = { review };
-    };
+  const handleSubmit = () => {
+    alert('리뷰 작성이 완료되었습니다.');
+    navigate('/mypage');
+
+    const dataToSend = [
+      {
+        nickname: partnerNames[0],
+        grade: starCounts[0],
+        comment: partnerReviews[0],
+      },
+      {
+        nickname: partnerNames[1],
+        grade: starCounts[1],
+        comment: partnerReviews[1],
+      }
+    ];
+    console.log('서버로 전송할 데이터:', dataToSend);
+    
+  };
+  const receiveStarCount = (count, index) => {
+    const updatedStarCounts = [...starCounts];
+    updatedStarCounts[index] = count;
+    setStarCounts(updatedStarCounts);
+  };
     
   return (
-   <>
+   <> 
+      <Mobile>
         <ReviewDiv>
           <ReviewInfo>
-            <Logo>
-              <Delishare/>
-            </Logo>
             <ReviewInfoDiv>
-                <ReviewImg>
-                  <img src={ProfileImg}/>
-                </ReviewImg>
-                <ReviewNick> (상대방 닉네임) </ReviewNick>
-                <ReviewStar>
-                  <RateStar/>
-                </ReviewStar>
-                <OppReview> 리뷰 </OppReview>
-                <InputField input type = 'text' value = {review} 
-                    onChange = {(e) => submitReview(e.target.value)} 
-                    placeholder = '상대방이 어떠하셨나요?'/>
+            <ReviewNick> {partnerNames[0]} </ReviewNick>
+            <ReviewStar>
+              <RateStar sendStarCount={(count) => receiveStarCount(count, 0)} />
+              </ReviewStar>
+              <OppReview> 리뷰 </OppReview>
+              <InputField
+                input
+                type="textarea"
+                placeholder="상대방이 어떠하셨나요?"
+                value={partnerReviews[0]}
+                onChange={(e) => {
+                  const reviews = [...partnerReviews];
+                  reviews[0] = e.target.value;
+                  setPartnerReviews(reviews);
+                }}
+              />
+              <ReviewNick> {partnerNames[1]} </ReviewNick>
+              <ReviewStar>
+              <RateStar sendStarCount={(count) => receiveStarCount(count, 1)} />
+              </ReviewStar>
+              <OppReview> 리뷰 </OppReview>
+              <InputField
+                input
+                type="textarea"
+                placeholder="상대방이 어떠하셨나요?"
+                value={partnerReviews[1]}
+                onChange={(e) => {
+                  const reviews = [...partnerReviews];
+                  reviews[1] = e.target.value;
+                  setPartnerReviews(reviews);
+                }}
+              />
+              <ReviewBtn onClick={handleSubmit}> 작성완료 </ReviewBtn>
             </ReviewInfoDiv>
-            <ReviewBtn onClick={handleSubmit}> 작성완료 </ReviewBtn>
+           
           </ReviewInfo>
         </ReviewDiv>
+      </Mobile>
+
+
+      <Pc>
+            <PcWrapper>
+            pc
+            </PcWrapper>   
+        </Pc>
    </>
   )
 }
 
 /* 별점 추후 구현 */
+const PcWrapper = styled.div`
+width: 1920px;
+height: 305px;
+flex-shrink: 0;
+background: #FF4256;
+`
 
 const ReviewDiv = styled.div`
   display: flex;
@@ -59,8 +129,10 @@ const ReviewDiv = styled.div`
 `
 
 const ReviewInfo = styled.div`
+  position : relative;
   width: 22.5rem;
   height: 33.75rem;
+  padding-bottom : 2rem;
   border-radius : 0.9375rem;    
   background-color : #FF7062;
 `
@@ -73,38 +145,39 @@ const Logo = styled.div`
 const ReviewInfoDiv = styled.div`
   position : relative;
   width: 20.5rem;
-  height: 27.5rem;
+  height: 32rem;
   left : 0.975rem;
+  
   border-radius : 0.9375rem;    
   background-color : #FFFFFF;
 `
 
-const ReviewImg = styled.div`
-img {
-  position : relative;
-  margin : 2.5rem 5.75rem 0rem 5.75rem;
-  width : 9rem;
-  height : 9rem;
-  top : -1.5rem;
-  border-radius : 4.5rem;
-}
-`
+// const ReviewImg = styled.div`
+// position : relative;
+// margin : 2.5rem 5.75rem 0rem 5.75rem;
+// width : 9rem;
+// height : 9rem;
+// top : 1.5rem;
+// border : 1px solid #000000;
+// border-radius : 4.5rem;
+// `
 
 const ReviewNick = styled.p`
 position : relative;
+margin-top : 1.5rem;
 font-weight : bold;
-top : -0.5rem;
 font-size : 1.25rem;
 text-align : center;
+padding-top : 1rem;
 `
 
 const ReviewStar = styled.div`
 position : relative;
 margin-left : 5.25rem;
+margin-top : -1rem;
 border : none;
 width : 10rem;
 height : 2rem;
-top : -2rem;
 font-size : 1.25rem;
 color : #FFC000;
 `
@@ -112,30 +185,31 @@ color : #FFC000;
 const OppReview = styled.div`
 position : relative;
 left : 1.75rem;
-top : 0rem;
+margin-top:2rem;
 color : #FF7062;
 font-weight : bold;
 `
-
-const InputField = styled.input`
-position : relative;
-left : 0.925rem;
-width: 16.5rem;
-top : 0rem;
-height: 5rem;
-border-radius: 1rem;
-margin-top : 0.25rem;
-padding-left : 1rem;
-padding-right : 1rem;
-border: 2px solid #7D7D7D;
-`
+const InputField = styled.textarea`
+  position: relative;
+  left: 0.925rem;
+  width: 16.5rem;
+  min-height: 5rem; /* 최소 높이 */
+  max-height: 10rem; /* 최대 높이 */
+  resize: vertical; /* 세로 크기 조절 */
+  border-radius: 1rem;
+  margin-top: 0.25rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 2px solid #7D7D7D;
+  overflow-y: auto; /* 스크롤바 추가 */
+`;
 
 const ReviewBtn = styled.button`
   position : relative;
   width : 18.75rem;
   height : 3rem;
-  left : 1.875rem;
-  top : -4rem;
+  margin-top : 1rem;
+  margin-left : 0.9rem;
   color : #FFFFFF;
   font-family : 'Pretendard';
   font-size : 1.125rem;

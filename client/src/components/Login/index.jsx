@@ -59,7 +59,11 @@ export const Mobile = ({ children }) => {
             email, 
             password,
           });
+<<<<<<< HEAD
           alert(JSON.stringify(res.data));
+=======
+          // alert(JSON.stringify(res.data));
+>>>>>>> afa742c5bb07110c5a677b2151e8950955a04dd5
          const accessToken = res.data.accessToken;
 
       // 토큰 저장
@@ -73,6 +77,7 @@ export const Mobile = ({ children }) => {
       }
     }
     
+<<<<<<< HEAD
     /*
     // 아래의 코드를 활용할 예정
     const correctEmail = 'abcd@naver.com'; // ovg07047@naver.com
@@ -112,6 +117,9 @@ export const Mobile = ({ children }) => {
         }
       };
       */
+=======
+
+>>>>>>> afa742c5bb07110c5a677b2151e8950955a04dd5
 
   return (
    <>
