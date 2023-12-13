@@ -59,7 +59,11 @@ export const Mobile = ({ children }) => {
             email, 
             password,
           });
+<<<<<<< HEAD
+          alert(JSON.stringify(res.data));
+=======
           // alert(JSON.stringify(res.data));
+>>>>>>> afa742c5bb07110c5a677b2151e8950955a04dd5
          const accessToken = res.data.accessToken;
 
       // 토큰 저장
@@ -73,7 +77,49 @@ export const Mobile = ({ children }) => {
       }
     }
     
+<<<<<<< HEAD
+    /*
+    // 아래의 코드를 활용할 예정
+    const correctEmail = 'abcd@naver.com'; // ovg07047@naver.com
+    const correctPassword = '1234'; // 1
+    
+    
+    const handleLogin = () => {
+        if(email === ""){
+          alert("아이디를 입력해주세요.");
+        } else if (password === "") {
+          alert("비밀번호를 입력해주세요.")
+        } else {
+          axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login', {
+            email,
+            password,
+          })
+          .then(res => {
+              //localStorage.setItem('accessToken', res.data.accessToken);
 
+              // header에 토큰 넣는 로직
+              //setInterceptor(res.data.userToken);
+              //login();   // 해당 위치에서 실행이 아니되면 아래 위치로 이동
+              //navigate('/main');   // 해당 위치에서 실행이 아니되면 아래 위치로 이동
+             
+              //return res.data.accessToken;
+          })
+          .catch(err => {
+            //navigate('/login');
+            //localStorage.removeItem('accessToken');
+          });
+        }
+
+        if(localStorage.getItem('accessToken') !== null)
+        {
+          login();
+          navigate('/main');
+        }
+      };
+      */
+=======
+
+>>>>>>> afa742c5bb07110c5a677b2151e8950955a04dd5
 
   return (
    <>

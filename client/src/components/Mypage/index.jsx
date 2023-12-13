@@ -18,38 +18,14 @@ export default function Mypage() {
   const [account_number, resetaccount_number] = useState('');
   const [password, resetPassword] = useState('');
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    id: 1,
-    nickname: '홍길동',
-    account_number: '1234-5678-9012-3456',
-    password: 'password',
-    grade: 5,
-    comment: 
-      ['친절해요  ', '불친절해요' , '좋아요']
-     // api호출시 데이터만 삭제
-  }); // 유저 데이터를 담을 상태
-  
-  useEffect(() => {
-    // 서버에서 사용자 정보를 가져오는 함수 (예시)
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('/api/user'); // 적절한 엔드포인트와 요청 방식을 사용하여 서버에 요청합니다.
-        setUserData(response.data); // 받아온 데이터를 상태에 저장합니다.
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
 
-    fetchUserData(); // 데이터를 불러오는 함수 호출
-  }, []);
-    const handleRevise = () => {
-      const nicknameRegex = /^\S{2,}$/;
+  const handleRevise = () => {
+    const accountnumRegex = /^(?=[0-9]){16}$/;
     const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/; 
 
-    if (!nicknameRegex.test(nickname)) {
-      window.alert('닉네임은 2자 이상이어야 합니다.');
-    }else if (!passwordRegex.test(password)) {
+    if (!accountnumRegex.test(accountnum)) {
+      window.alert('계좌번호는 숫자만 입력해야 합니다.');
+    } else if (!passwordRegex.test(password)) {
       window.alert('비밀번호는 4자 이상의 문자 혹은 숫자를 포함해야 합니다.');
     } else {
       window.alert('개인정보가 수정되었습니다.');
@@ -200,6 +176,7 @@ margin-top : 0.25rem;
 padding-left : 1rem;
 padding-right : 1rem;
 border: 2px solid #7D7D7D;
+font-size : 1.0625rem;
 `
 
 const MyReview = styled.div`
