@@ -1,4 +1,13 @@
 spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
   datasource:
     ## osspdb: DB? (mysql workbrench?? ?? ??)
     url: jdbc:mysql://${domain}}:3306/ossp_rds?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
