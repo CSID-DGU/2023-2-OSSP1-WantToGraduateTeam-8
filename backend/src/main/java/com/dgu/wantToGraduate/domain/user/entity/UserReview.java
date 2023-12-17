@@ -8,6 +8,8 @@ import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +21,7 @@ public class UserReview extends BaseTimeEntity {
     @Column(name= "userReview_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "User_Id")
     private User user;
 

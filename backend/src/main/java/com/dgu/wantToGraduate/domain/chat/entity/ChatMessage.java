@@ -4,6 +4,8 @@ import com.dgu.wantToGraduate.domain.BaseTimeEntity;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 public class ChatMessage extends BaseTimeEntity {
 
@@ -12,7 +14,7 @@ public class ChatMessage extends BaseTimeEntity {
     @Column (name = "chatMessage_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name="ChatRoom_id")
     private ChatRoom chatRoom;
 

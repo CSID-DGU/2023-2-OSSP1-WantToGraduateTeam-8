@@ -43,7 +43,7 @@ public class MatchingService {
     public MatchingDto.ResponseDto matching(MatchingDto.RequestDto selectInfo) {
         makePreferTable(selectInfo);
         MatchingDto.ResponseDto matchingResult = null;
-        if(waitUsers.size() > 4) {
+        if(waitUsers.size() > 100) {
             matchingResult = match();
         }
         return matchingResult;

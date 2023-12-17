@@ -11,6 +11,7 @@ import com.dgu.wantToGraduate.domain.matching.repository.BrandQueue;
 import com.dgu.wantToGraduate.domain.matching.repository.PreferBrandRepository;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
+import com.dgu.wantToGraduate.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,12 @@ public class MatchingService_Q_version {
     private final UserRepository userRepository;
     private final BrandRepository brandRepository;
     private final PreferBrandRepository preferBrandRepository;
+    private final UserService userService;
 
     public MatchingDto.ResponseDto matching(RequestDto selectInfo){
+        userService.toggleInit(selectInfo.getUserId()); // 매칭 시작 시 초기화
+
+
         totalGroupCnt++; // 3000명 카운팅
 
         MatchingDto.ResponseDto matchingResult = null;
@@ -38,6 +43,7 @@ public class MatchingService_Q_version {
         User userEntity = userRepository.findById(selectInfo.getUserId()).orElseThrow(()
                 -> new IllegalArgumentException("[예외발생]존재하지 않는 유저입니다."));
         log.info("[MatchingService] userEntity: {}", userEntity);
+//        userEntity.initFlag();
 
         Map<Integer,Brand> brandList = new HashMap();
         /*매장 대기열 생성*/
