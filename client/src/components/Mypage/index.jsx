@@ -19,23 +19,33 @@ export default function Mypage() {
   const [password, resetPassword] = useState('');
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    id: 1,
-    nickname: '홍길동',
-    account_number: '1234-5678-9012-3456',
-    password: 'password',
-    grade: 5,
-    comment: 
-      ['친절해요  ', '불친절해요' , '좋아요']
-     // api호출시 데이터만 삭제
-  }); // 유저 데이터를 담을 상태
+  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState({
+  //   userId: 1,
+  //   nickname: '홍길동',
+  //   account_number: '1234-5678-9012-3456',
+  //   password: 'password',
+  //   grade: 5,
+  //   comment: 
+  //     ['친절해요  ', '불친절해요' , '좋아요']
+  //    // api호출시 데이터만 삭제
+  // }); // 유저 데이터를 담을 상태
   
   useEffect(() => {
-    // 서버에서 사용자 정보를 가져오는 함수 (예시)
+    // 서버에서 사용자 정보를 가져오는 함수
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('/api/user'); // 적절한 엔드포인트와 요청 방식을 사용하여 서버에 요청합니다.
-        setUserData(response.data); // 받아온 데이터를 상태에 저장합니다.
+        const accessToken = localStorage.getItem('accessToken'); 
+        const response = await axios.get(
+          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/user-info',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // accessToken을 헤더에 포함
+            },
+          }
+        );
+        setUserData(response.data);
+        console.log(userData);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -53,7 +63,6 @@ export default function Mypage() {
       window.alert('비밀번호는 4자 이상의 문자 혹은 숫자를 포함해야 합니다.');
     } else {
       window.alert('개인정보가 수정되었습니다.');
-      // 서버로 개인정보를 전송하고 처리하는 로직이 추가되어야 함.
   
     }
 
@@ -67,25 +76,30 @@ export default function Mypage() {
 
   return (
     <MypageDiv>
+    {userData && (
       <ProfileInfoDiv>
         <ProfileText> MY PROFILE </ProfileText>
         <ProfileImg>
-          <img src ={ProfileImg1}></img>
+          <img src={ProfileImg1} alt="Profile"></img>
         </ProfileImg>
         <ProfileNick>{userData.nickname}</ProfileNick>
         <ReviewStar>
-        <StarRating grade={userData.grade} />
-          </ReviewStar>
+          <StarRating grade={userData.grade} />
+        </ReviewStar>
         <ProfileAccnt> 계좌번호: {userData.account_number}</ProfileAccnt>
       </ProfileInfoDiv>
-      <ProfileReviseDiv>
+    )}
+
+    <ProfileReviseDiv>
         <MyProfile> 내 프로필 </MyProfile>
         <InputField input type = 'text' value = {nickname} onChange = {(e) => resetNickname(e.target.value)} placeholder = '본인 닉네임'/>
         <InputField  input type = 'text' value = {account_number} onChange = {(e) => resetaccount_number(e.target.value)} placeholder = '계좌번호'/>
         <SecuritySet> 보안설정 </SecuritySet>
         <InputField input type = 'password' value = {password} onChange = {(e) => resetPassword(e.target.value)} placeholder = '비밀번호 재설정'/>
         <MyReview> 내 리뷰 </MyReview>
-        <MyReviewDiv><a>{userData.comment}</a></MyReviewDiv>
+        <MyReviewDiv>
+  {userData && <a>{userData.comment}</a>}
+</MyReviewDiv>
       </ProfileReviseDiv>
       <ProfileReviseBtn onClick={handleRevise}> 수정 </ProfileReviseBtn>
       <Toggle/>

@@ -30,17 +30,7 @@ export const Mobile = ({ children }) => {
     return grouped;
   }
 
-// 예시 데이터
-// const mockBrandList = [
-//   { id: 1, name: '프랭크버거 동국대점' },
-//   { id: 2, name: '블리스버거 앤 카페' },
-//   { id: 3, name: '버거킹 충무로역점' },
-//   { id: 4, name: '맘스터치 동국대점' },
-//   { id: 5, name: 'KFC 충무로역' },
-//   { id: 6, name: '버거원하우스 장충점' },
-//   { id: 7, name: '노브랜드버거 동국대점' },
-  
-// ];
+
 export default function Brand(props) {
   const [brandList, setBrandList] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -68,12 +58,10 @@ export default function Brand(props) {
            }
          }
         );
-        console.log('2');
         if (response.data) {
           setBrandList(response.data.brandNameList.map((brand, index) => ({ name: brand.brandName })));
           console.log(setBrandList);
         }
-        console.log('3');
       } catch (error) {
         console.error('Error fetching brand list:', error);
       }
@@ -82,26 +70,7 @@ export default function Brand(props) {
     fetchBrandList();
   }, [location.search]);
 
-  //로컬
-  // useEffect(() => {
-  //   // 실제 서버로부터 데이터를 가져오는 로직이 구현
-  //   // 여기서 categoryName을 사용하여 해당 카테고리의 브랜드 리스트를 가져온다.
-  //   const fetchBrandList = async () => {
-  //     try {
-  //       // 서버로부터 브랜드 리스트 데이터를 가져오는 API 호출
-  //       // const response = await fetch(`https://example.com/api/brands/${categoryName}`);
-  //       // const data = await response.json();
 
-  //       const data = mockBrandList;
-
-  //       setBrandList(data);
-  //     } catch (error) {
-  //       console.error('Error fetching brand list:', error);
-  //     }
-  //   };
-
-  //   fetchBrandList(); // 데이터 가져오는 함수 호출
-  // }, [categoryName]);
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   const groupedBrandList = groupCategories(brandList);
   
@@ -138,17 +107,23 @@ export default function Brand(props) {
         }));
 
         const data = {
-          userId: 3, // 사용자 ID는 여기서 예시로 9로 설정
           preferBrandList,
         };
-        console.log('보내는 데이터:', data); // 여기서 데이터를 콘솔에 출력
+        console.log('보내는 데이터:', data); 
+        const accessToken = localStorage.getItem('accessToken'); 
+  
         const response = await axios.post(
-          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/v1',
-          data
+          'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/v2',
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // accessToken을 헤더에 포함
+            },
+          }
         );
 
         console.log('서버 응답:', response.data);
-        navigate('/matching');
+        navigate('/matching');    
       } catch (error) {
         console.error('매칭 요청 실패:', error);
       }

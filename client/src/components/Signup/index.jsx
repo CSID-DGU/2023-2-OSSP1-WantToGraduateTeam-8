@@ -66,10 +66,7 @@ export default function Signup() {
     });
     
     alert("회원가입이 완료되었습니다.");
-    // navigate("/login");
-      // 서버로 회원가입 정보를 전송하고 처리하는 로직이 추가되어야 함.
-      // 회원가입 완료 후 로그인 창으로 이동
-      // navigate('/login');
+
     }
 
     const newMember = { nickname, password, account_number, email };

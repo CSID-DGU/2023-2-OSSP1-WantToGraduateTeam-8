@@ -28,24 +28,6 @@ export const Mobile = ({ children }) => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    /*
-   const handleLogin = () => {
-      const correctEmail = 'abcd@naver.com'; // 임시 아이디
-      const correctPassword = '1234'; // 임시 비밀번호
-  
-      if (email === correctEmail && password === correctPassword) {
-        localStorage.setItem('accessToken', 'AccessConfirmed');
-        
-        login(); // AuthContext의 login 함수를 호출하여 사용자 로그인 상태를 변경.
-        
-        // 로그인 성공 시 MainPage로 이동.
-        navigate('/main');
-      } else {
-        navigate('/login');
-        alert('아이디 혹은 비밀번호가 틀립니다.');
-      }
-    };
-    */
 
     const handleLogin = async (e) => {
       e.preventDefault();

@@ -5,6 +5,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../assets/imgs/MatchingSpin.gif';
 import Toggle from '../../components/Toggle';
+import axios from 'axios';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -20,38 +21,65 @@ export const Mobile = ({ children }) => {
     return <>{isPc && children}</>
   }
 
-export default function Matching() {
-  const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수를 가져옴
-  const [isMatchingComplete, setIsMatchingComplete] = useState(false);
-
-  // 예시: 매칭이 완료되었다고 가정하고, 일정 시간 후에 매칭완료 페이지로 이동
-  useEffect(() => {
-    // 예시: 매칭이 완료되었다고 가정
-    setTimeout(() => {
-      setIsMatchingComplete(true);
-    }, 3000); // 3초 후 매칭 완료 상태로 변경
-});
-
-  const handleChattingClick = () => {
-    navigate('/chatting');
-  };
+  export default function Matching() {
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      const accessToken = localStorage.getItem('accessToken');
+      let count = 0; // 요청 횟수를 저장하는 변수
+  
+      const interval = setInterval(async () => {
+        try {
+          count++;
+          if (count > 10) {
+            clearInterval(interval);
+            setIsLoading(false); // 로딩 상태 해제
+            return;
+          }
+  
+          const response = await axios.get('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/status/flag', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          const { flag } = response.data;
+          console.log(response.data);
+          if (flag) {
+            navigate('/chat/main');
+            clearInterval(interval);
+          } else {
+            setIsLoading(true);
+          }
+        } catch (error) {
+          console.error('API 호출 오류:', error);
+        }
+      }, 3000); // 3초마다 실행
+  
+      return () => clearInterval(interval);
+    }, [navigate]);
+  
+    const handleChattingClick = () => {
+      navigate('/main');
+    };
+  
     return (
        <>
         <Mobile>
           <MobileContainer>
           <MobileWrapper>
             <MatchingContainer>
-              {!isMatchingComplete &&(
+              {isLoading &&(
                 <>
                 <img src={Spinner} alt="로딩중" width="50%" />
                 <p>선택하신 브랜드 위주로 매칭중입니다...</p>
                 </>
               ) }
-                {isMatchingComplete && (
+                {!isLoading && (
                 <>
                   <MiddleLogo>Share,<br/> Delicious</MiddleLogo>
-                  <p>매칭이 완료되었습니다!</p>
-                  <Button onClick={handleChattingClick}>채팅방 이동하기</Button>
+                  <p>매칭이 실패하였습니다..</p>
+                  <Button onClick={handleChattingClick}>음식점 다시 선택하기</Button>
                 </>
               )}
             </MatchingContainer>
@@ -75,6 +103,7 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
+background: #FF4256;
 `
 
 const MobileContainer = styled.div`
