@@ -10,7 +10,7 @@ public class MatchingDto {
 
     @Getter
     public static class RequestDto{
-        private Long userId;
+//        private Long userId;
         private List<SelectDto> preferBrandList;
         @Getter
         @NoArgsConstructor

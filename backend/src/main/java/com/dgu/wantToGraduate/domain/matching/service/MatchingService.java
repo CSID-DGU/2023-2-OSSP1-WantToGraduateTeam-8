@@ -2,14 +2,18 @@ package com.dgu.wantToGraduate.domain.matching.service;
 
 
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.RequestDto.SelectDto;
+import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.ResponseDto;
 import com.dgu.wantToGraduate.domain.matching.repository.PreferTable;
 import com.dgu.wantToGraduate.domain.type.WaitUser;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
+import com.dgu.wantToGraduate.domain.user.service.UserService;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,12 +22,14 @@ import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MatchingService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
+
     private ConcurrentSkipListSet<WaitUser> waitUsers = new ConcurrentSkipListSet<>(
             Comparator.comparing(WaitUser::getGrade, Comparator.reverseOrder())
                     .thenComparing(wu -> wu.getUser().getId(), Comparator.reverseOrder())
@@ -40,39 +46,48 @@ public class MatchingService {
 
     private List<User> failList = new ArrayList<>();
 
-    public MatchingDto.ResponseDto matching(MatchingDto.RequestDto selectInfo) {
+    public ResponseDto matching(MatchingDto.RequestDto selectInfo) {
+
         makePreferTable(selectInfo);
-        MatchingDto.ResponseDto matchingResult = null;
-        if(waitUsers.size() > 100) {
+        ResponseDto matchingResult = null;
+        if(waitUsers.size() > 2) {
+            userService.toggleInit(getUserId()); // 매칭 시작 시 초기화 false: 매칭중, true: 매칭완료
             matchingResult = match();
         }
         return matchingResult;
     }
 
     private List<Integer> calculateSameNumAndPriority(WaitUser waitUser1, WaitUser waitUser2) {
+
         List<String> brandNameList1 = waitUser1.getPreferBrand().stream()
-                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
+                .map(SelectDto::getBrandName)
                 .collect(Collectors.toList());
+
         List<String> brandNameList2 = waitUser2.getPreferBrand().stream()
-                .map(MatchingDto.RequestDto.SelectDto::getBrandName)
+                .map(SelectDto::getBrandName)
                 .collect(Collectors.toList());
+
         List<Integer> sameNumAndPriority = new ArrayList<>();
         List<String> intersection = new ArrayList<>(brandNameList1);
+
         intersection.retainAll(brandNameList2);
-        int prioirty = 0;
+
+        int priority = 0;
         for(String brandName : intersection) {
-            prioirty += Math.abs(waitUser1.findPriorityByBrandName(brandName) - waitUser2.findPriorityByBrandName(brandName));
+            priority += Math.abs(waitUser1.findPriorityByBrandName(brandName) - waitUser2.findPriorityByBrandName(brandName));
         }
+
         sameNumAndPriority.add(intersection.size());
-        sameNumAndPriority.add(prioirty);
+        sameNumAndPriority.add(priority);
 
         return sameNumAndPriority;
     }
 
     //RequestDto 받아서 선호도 테이블 작성
     private void makePreferTable(MatchingDto.RequestDto selectInfo) {
+
         //받은 정보들로 waitUser 빌드
-        User insertUser = userRepository.findById(selectInfo.getUserId()).orElseThrow();
+        User insertUser = userRepository.findById(getUserId()).orElseThrow();
         WaitUser insertWaitUser = WaitUser.builder()
                 .user(insertUser)
                 .sameNum(0)
@@ -81,7 +96,7 @@ public class MatchingService {
                 .build();
         waitUsers.add(insertWaitUser);
         for(WaitUser waitUser : waitUsers){
-            if(selectInfo.getUserId() == waitUser.getUser().getId()) continue;
+            if(getUserId() == waitUser.getUser().getId()) continue;
             List<Integer> sameNumAndPriority = calculateSameNumAndPriority(waitUser, insertWaitUser);
             WaitUser preferTableUser = new WaitUser(waitUser);
             WaitUser insertPreferTableUser = new WaitUser(insertWaitUser);
@@ -94,20 +109,24 @@ public class MatchingService {
         }
     }
 
-    private MatchingDto.ResponseDto match() {
+    private ResponseDto match() {
         for(WaitUser waitUser : waitUsers){
+
             if(!finishList.mightContain(waitUser.getUser().getId())) {
                 List<User> mateData = new ArrayList<>();
                 mateData.add(waitUser.getUser());
+
                 for (WaitUser mateUser : preferTable.getWaitUser(waitUser.getUser().getId())) {
                     if (!finishList.mightContain(mateUser.getUser().getId())) {
                         if (mateData.size() >= 3) break;
                         mateData.add(mateUser.getUser());
                     }
                 }
+
                 if (mateData.size() > 2) { //결과 반환
                     for (User user : mateData) {
                         finishList.put(user.getId());
+                        userService.toggleUserMatchFlag(user.getId()); // 매칭 완료 시 초기화 true: 매칭완료, false: 매칭중
                     }
                     return convertToDto(mateData);
                 } else {
@@ -120,14 +139,19 @@ public class MatchingService {
         return null;
     }
 
-    private MatchingDto.ResponseDto convertToDto(List<User> mateData) {
+    private ResponseDto convertToDto(List<User> mateData) {
         List<String> mateNicknameList = mateData.stream()
                 .map(User::getNickname)
                 .collect(Collectors.toList());
-        MatchingDto.ResponseDto matchingResult = MatchingDto.ResponseDto.builder()
+        ResponseDto matchingResult = ResponseDto.builder()
                 .matchList(mateNicknameList)
                 .build();
 
         return matchingResult;
+    }
+
+    private Long getUserId(){
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userId;
     }
 }

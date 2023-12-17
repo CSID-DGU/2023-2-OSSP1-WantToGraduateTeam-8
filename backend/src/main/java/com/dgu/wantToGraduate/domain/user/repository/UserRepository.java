@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("update User u set u.isMatched = ?2 where u.id = ?1")
     @Transactional
     public void updateUserFlag(Long userId, boolean flag);
+
+    @Query("select u.id from User u where u.nickname = ?1")
+    public Long findUserIdByNickname(String nickname);
 }

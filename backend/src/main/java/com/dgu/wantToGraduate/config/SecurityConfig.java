@@ -22,8 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtTokenFilter jwtTokenFilter;
-//    @Autowired
-//    private PrincipalDetailsService PrincipalDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,7 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .cors()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/user/login/**", "/user/join/**","/","/error/**").permitAll()
@@ -40,19 +37,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
-//                //✅TODO: form session login으로 변경
-//                .formLogin()
-//                .usernameParameter("email")
-//                .passwordParameter("password")
-//                .loginProcessingUrl("/user/login")
-//                .successHandler(new LoginSuccessHandler()) //200
-//                .failureHandler(new LoginFailureHandler());//401
-
     }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(PrincipalDetailsService);
-//    }
 }

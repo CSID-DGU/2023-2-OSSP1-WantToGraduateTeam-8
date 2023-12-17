@@ -13,10 +13,10 @@ public class ReviewDto {
     @AllArgsConstructor
     @Builder
     public static class ReviewRequestDto {
-        private Long userId_1;
+        private String nickname_1;
         private float grade_1;
         private String comment_1;
-        private Long userId_2;
+        private String nickname_2;
         private float grade_2;
         private String comment_2;
     }

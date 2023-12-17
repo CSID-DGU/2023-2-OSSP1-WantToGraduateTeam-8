@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   devtools:
     livereload:
@@ -10,10 +13,10 @@ spring:
     suffix: .ftl
   datasource:
     ## osspdb: DB? (mysql workbrench?? ?? ??)
-    url: jdbc:mysql://${domain}}:3306/ossp_rds?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://master.cgnxclpceiqv.ap-northeast-2.rds.amazonaws.com:3306/ossp_rds?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     ##???? ???? ??
-    username: ${username}
-    password: ${password}
+    username: admin
+    password: ossp1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate.ddl-auto: update

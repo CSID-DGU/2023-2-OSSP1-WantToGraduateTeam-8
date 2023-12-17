@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    @PostMapping("/matching/review/{userid}")
-    public String writeReview(@PathVariable Long userid, @RequestBody ReviewDto.ReviewRequestDto reviewRequestDto){
-        reviewService.writeReview(userid, reviewRequestDto);
+    @PostMapping("/matching/review")
+    public String writeReview(@RequestBody ReviewDto.ReviewRequestDto reviewRequestDto){
+        reviewService.writeReview(reviewRequestDto);
         return "리뷰 등록 완료";
     }
 
