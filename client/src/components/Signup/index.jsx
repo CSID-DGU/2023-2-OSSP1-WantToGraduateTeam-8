@@ -38,10 +38,11 @@ export default function Signup() {
 
 
 
-  const handleSignup = () => {
+  const handleSignup = async (e) => {
     const nicknameRegex = /^\S{2,}$/;
     const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/;
     
+    e.preventDefault();
 
     if (!nicknameRegex.test(nickname)) {
       window.alert('닉네임은 2자 이상이어야 합니다.');
@@ -50,22 +51,26 @@ export default function Signup() {
     } else if (!validateEmail(email)) {
       window.alert('올바른 이메일 형식이 아닙니다.');
     } else {
-      axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/join', {
-        nickname : nickname,  
-        email : email,
-        password : password,
-        account_number : account_number,
-    })
-    .then(res => {
-      if(res.data.nickname !== null){
+      try {
+        const res = await axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/join', 
+        {
+          nickname,  
+          email,
+          password,
+          account_number,
+        });
+
+        alert("회원가입이 완료되었습니다.");
         navigate("/login");
+      } catch(err){
+        if(err.response.status === 409){
+          alert("중복된 계정입니다.");
+        }
+        else{
+          alert("다시 회원가입해주시기 바랍니다.");
+        }
       }
-    })
-    .catch(err => {
-      alert('다시 회원가입해주시기 바랍니다.');
-    });
     
-    alert("회원가입이 완료되었습니다.");
     // navigate("/login");
       // 서버로 회원가입 정보를 전송하고 처리하는 로직이 추가되어야 함.
       // 회원가입 완료 후 로그인 창으로 이동
