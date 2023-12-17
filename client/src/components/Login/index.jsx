@@ -49,21 +49,25 @@ export const Mobile = ({ children }) => {
 
     const handleLogin = async (e) => {
       e.preventDefault();
+      
       if(email === ""){
         alert("아이디를 입력해주세요.");
       } else if (password === "") {
         alert("비밀번호를 입력해주세요.")
       } else {
         try {
-          const res = await axios.post("http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login", {
+          const res = await axios.post("http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/login", 
+          {
             email, 
             password,
-          });
+          }
+          );
           // alert(JSON.stringify(res.data));
          const accessToken = res.data.accessToken;
 
       // 토큰 저장
           localStorage.setItem("accessToken", accessToken);
+          //axios.defaults.headers.common['Authorization'] = accessToken;
           login();
           navigate('/main');
         } catch (err) {
@@ -71,7 +75,7 @@ export const Mobile = ({ children }) => {
           alert("로그인 실패" , err);
         }
       }
-    }
+    };
     
 
 
