@@ -10,6 +10,11 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE UserReview u SET u.grade = :grade WHERE u.id = :id")
+    void updateGradeById(Long id, float grade);
+
     @Query("select u from User u where u.email = ?1")
     public Optional<User> findByEmail(String email);
 

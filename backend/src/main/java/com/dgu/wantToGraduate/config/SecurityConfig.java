@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers("/user/login/**", "/user/join/**","/","/error/**").permitAll()
                 .antMatchers("/matching/run/**").permitAll() //TODO⚠️: 매칭 스트레스 테스트를 위해 임시로 허용
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
 
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

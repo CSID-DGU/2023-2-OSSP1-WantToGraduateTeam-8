@@ -19,8 +19,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
+
+import static com.dgu.wantToGraduate.domain.chat.service.ChatRoomService.matchedUser;
 
 @Service
 @Slf4j
@@ -126,6 +129,7 @@ public class MatchingService {
                 if (mateData.size() > 2) { //결과 반환
                     for (User user : mateData) {
                         finishList.put(user.getId());
+                        makeChatInf(mateData);
                         userService.toggleUserMatchFlag(user.getId()); // 매칭 완료 시 초기화 true: 매칭완료, false: 매칭중
                     }
                     return convertToDto(mateData);
@@ -153,5 +157,13 @@ public class MatchingService {
     private Long getUserId(){
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userId;
+    }
+
+    private void makeChatInf(List<User> users) {
+        String roomId = UUID.randomUUID().toString();
+        List<Long> userIds = users.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+        matchedUser.put(roomId, userIds);
     }
 }

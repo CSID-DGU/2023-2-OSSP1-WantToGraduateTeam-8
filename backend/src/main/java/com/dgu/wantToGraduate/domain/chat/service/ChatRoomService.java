@@ -23,6 +23,7 @@ public class ChatRoomService {
     public ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom) {
          return new ChatRoomDto(chatRoom.getRoomId());
     }
+
     public List<ChatRoomDto> findAllRoom() {
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();
         return chatRooms.stream()

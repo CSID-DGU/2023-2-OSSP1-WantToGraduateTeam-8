@@ -13,13 +13,13 @@ spring:
     suffix: .ftl
   datasource:
     ## osspdb: DB? (mysql workbrench?? ?? ??)
-    url: jdbc:mysql://master.cgnxclpceiqv.ap-northeast-2.rds.amazonaws.com:3306/ossp_rds?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/osspdb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     ##???? ???? ??
-    username: admin
-    password: ossp1234
+    username: root
+    password: park1831
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create
     properties:
       hibernate:
         format_sql: true

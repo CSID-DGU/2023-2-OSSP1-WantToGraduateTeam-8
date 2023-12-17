@@ -25,7 +25,7 @@ public class ChatRoomController {
 
     @GetMapping("/main")
     public String start() {
-        chatRoomService.setTestUser();
+//        chatRoomService.setTestUser();
         chatRoomService.createChatRoom();
         return "chat/start";
     }
