@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-icons": "^4.12.0"
+  },
+  "proxy" : "http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080"
+}

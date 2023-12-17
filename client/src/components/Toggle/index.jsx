@@ -29,7 +29,7 @@ const Toggle = () => {
         </MenuItem>
         <MenuItem>
           <NavLink to="/chatting">
-            <IoChatboxEllipsesOutline size={45} color="#fff" />
+            <IoChatboxEllipsesOutline size={44} color="#fff" />
           </NavLink>
         </MenuItem>
         <MenuItem>

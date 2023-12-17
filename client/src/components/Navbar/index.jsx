@@ -31,6 +31,7 @@ export default function Navbar() {
     logout(); // 로그아웃 함수 호출
     localStorage.removeItem('accessToken');
     navigate('/') // '/main' 페이지로 이동
+
   };
   return (
    <>
@@ -100,7 +101,6 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
-background: #FF4256;
 `
 
 

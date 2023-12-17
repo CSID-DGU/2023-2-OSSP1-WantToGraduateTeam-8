@@ -58,7 +58,6 @@ export default function MainPage() {
     
   ];
   const accessToken = localStorage.getItem('accessToken');
-  console.log("In Main Page");
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   const handleCategoryClick = async (categoryName, navigate) => {
     try {
