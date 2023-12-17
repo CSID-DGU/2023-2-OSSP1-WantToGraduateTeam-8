@@ -43,4 +43,9 @@ public class BrandDto {
             return new BrandListResponse(brandDtoList);
         }
     }
+
+    @Getter
+    public static class BrandCategoryRequest{
+        private String category;
+    }
 }

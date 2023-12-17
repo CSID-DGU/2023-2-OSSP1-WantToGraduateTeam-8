@@ -5,6 +5,7 @@ import com.dgu.wantToGraduate.domain.brand.repository.BrandRepository;
 import com.dgu.wantToGraduate.domain.matching.dto.MatchingDto.ResponseDto;
 import com.dgu.wantToGraduate.domain.user.entity.User;
 import com.dgu.wantToGraduate.domain.user.repository.UserRepository;
+import com.dgu.wantToGraduate.domain.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,9 +22,7 @@ import java.util.stream.Collectors;
 public class BrandQueue {
 
         private final UserRepository userRepository;
-
-        private final BrandRepository brandRepository;
-
+        private final UserService userService;
         private final PreferBrandRepository preferBrandRepository;
         private static ConcurrentSkipListSet<Brand> brandQueue = new ConcurrentSkipListSet<>();
         private static ConcurrentHashMap<Long, ConcurrentSkipListSet<WaitUser>> storeUsers = new ConcurrentHashMap<>();
@@ -35,30 +34,36 @@ public class BrandQueue {
         public ResponseDto addUser(Long userId, Long brandId, int priority) {
 
             Optional<User> userEntity = userRepository.findById(userId);
-            if(!userEntity.isPresent()){
+            if (!userEntity.isPresent()) {
                 throw new IllegalArgumentException("[예외발생] 존재하지 않는 유저입니다.");
             }
-            LocalDateTime timeStamp = preferBrandRepository.findByUserAndBrandId(userEntity.get(), brandId).getCreateAt();
-            WaitUser waitUser = new WaitUser(userEntity.get(), priority, timeStamp);
-            storeUsers.get(brandId).add(waitUser);
+            boolean curMatchFlag = userEntity.get().isMatched();
+            //TODO: toggle메서드가 내 생각대로 동작하지 않는 것 같음. 수정 필요🧑‍💻
+            if (!curMatchFlag) {
+                //TODO: PreferBrand는 없는데, 그에 반해 User는 남아있기에 NullPointException 발생
+                LocalDateTime timeStamp = preferBrandRepository.findByUserAndBrandId(userEntity.get(), brandId).getCreateAt();
+                WaitUser waitUser = new WaitUser(userEntity.get(), priority, timeStamp);
+                storeUsers.get(brandId).add(waitUser);
 
-            showBrandQueue(); //TEST: 추가될 때마다 storeUsers 내용 확인( before match)
+                showBrandQueue(); //TEST: 추가될 때마다 storeUsers 내용 확인( before match)
 
-            List<WaitUser> matchedUsers = executeMatching(brandId);
-            log.info("[###########] matchedUsers: {}", matchedUsers);
-            if(matchedUsers!=null){
-                ResponseDto matchingResult = ResponseDto.builder()
-                        .brandId(brandId)
-                        .matchList(matchedUsers.stream()
-                                .map(WaitUser::getUser)
-                                .map(User::getNickname)
-                                .collect(Collectors.toList()))
-                        .build();
-                log.info("[###########] matchingResult: {}", matchingResult);
-                return matchingResult;
+                List<WaitUser> matchedUsers = executeMatching(brandId);
+                log.info("[###########] matchedUsers: {}", matchedUsers);
+                if (matchedUsers != null) {
+                    ResponseDto matchingResult = ResponseDto.builder()
+                            .brandId(brandId)
+                            .matchList(matchedUsers.stream()
+                                    .map(WaitUser::getUser)
+                                    .map(User::getNickname)
+                                    .collect(Collectors.toList()))
+                            .build();
+                    log.info("[###########] matchingResult: {}", matchingResult);
+                    return matchingResult;
+                }
             }
             return null;
         }
+
 
     private List<WaitUser> executeMatching(Long brandId){
         if(storeUsers.get(brandId).size() >= 3){
@@ -70,6 +75,7 @@ public class BrandQueue {
 
             //매칭된 유저 PreferBrand 에서 삭제
             matchedUsers.forEach(matchedUser -> {
+                userService.toggleUserMatchFlag(matchedUser.getUser().getId());
                 log.info("[Delete Test Log] : userId is {} - brandId is {}", matchedUser.getUser().getId(), brandId);
                 preferBrandRepository.deleteByUser(matchedUser.getUser().getId());
             });

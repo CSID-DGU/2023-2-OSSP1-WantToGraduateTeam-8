@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class BrandController {
 
     private final BrandService brandService;
+
+    @CrossOrigin(origins = "*", exposedHeaders = "Authorization")
     @GetMapping("/list/all")
     public ResponseEntity<?> getBrandList(@RequestParam("category") String category){
         log.info("getBrandList 진입");
         return ResponseEntity.ok(brandService.searchAll(category));
     }
 
+    @CrossOrigin(origins = "*", exposedHeaders = "Authorization")
     @GetMapping("/list")
     public ResponseEntity<?> getBrand(@RequestParam("search") String brandName){
 

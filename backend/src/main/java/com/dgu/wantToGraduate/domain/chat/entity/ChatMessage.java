@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -20,6 +22,7 @@ public class ChatMessage extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "chatMessage_id")
     private Long id;
+
 
     @Enumerated(EnumType.STRING)
     private ChatMessageDto.MessageType type;

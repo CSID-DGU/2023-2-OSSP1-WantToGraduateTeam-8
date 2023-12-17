@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class PreferBrand extends BaseTimeEntity {
     @Column(name = "preferBrand_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -29,7 +31,7 @@ public class PreferBrand extends BaseTimeEntity {
     @Column
     private int priority;
 
-    @ManyToOne
+    @ManyToOne(fetch=LAZY)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 }

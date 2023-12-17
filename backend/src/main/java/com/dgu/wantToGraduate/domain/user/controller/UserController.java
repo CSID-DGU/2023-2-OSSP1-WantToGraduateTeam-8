@@ -4,9 +4,7 @@ import com.dgu.wantToGraduate.domain.user.dto.UserDto;
 import com.dgu.wantToGraduate.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -26,4 +24,16 @@ public class UserController {
 
         return ResponseEntity.ok(userService.userValidation(reqLoginDto));
     }
+
+    @GetMapping("/")
+    public String home() {
+        return "hihihihihi";
+    }
+
+//    @GetMapping("/toggle/test/{userId}")
+//    public ResponseEntity<?> toggleTest(@PathVariable Long userId){
+//        boolean b = userService.toggleTest(userId);
+//
+//        return ResponseEntity.ok(b);
+//    }
 }

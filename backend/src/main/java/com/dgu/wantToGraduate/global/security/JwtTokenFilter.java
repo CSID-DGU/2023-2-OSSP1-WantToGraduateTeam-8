@@ -4,6 +4,7 @@ import com.dgu.wantToGraduate.global.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Enumeration;
 
 @Configuration
 @Slf4j
@@ -22,9 +25,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     public JwtTokenFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        printHeaders(request);
+
         log.info("JwtTokenFilter 진입");
+        log.info(request.getHeader("Authorization"));
+        //헤더에 담긴 내용 전부 출력
+        log.info("헤더에 담긴 내용 전부 출력");
 
         String authorizationHeader = request.getHeader("Authorization");
         log.info("authorizationHeader: " + authorizationHeader);
@@ -51,10 +60,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 log.info("(토큰 검증 실패)유효하지 않은 토큰입니다.");
                 SecurityContextHolder.clearContext();
                 filterChain.doFilter(request, response);
+                e.printStackTrace();
             }
         } else{
             log.info("토큰이 없습니다.");
             filterChain.doFilter(request, response);
+        }
+    }
+
+    private void printHeaders(final HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            log.info("Header: {} = {}", headerName,request.getHeader(headerName));
         }
     }
 }
