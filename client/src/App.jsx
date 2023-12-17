@@ -12,6 +12,7 @@ import Signup from './components/Signup/index';
 import Chatting from './pages/Chatting/index.';
 import Mypage from './components/Mypage/index';
 import Review from './components/Review';
+import axios from '../src/axiosConfig'; 
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);

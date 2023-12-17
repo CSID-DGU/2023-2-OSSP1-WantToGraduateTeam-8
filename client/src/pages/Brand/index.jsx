@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Toggle from '../../components/Toggle';
 import axios from 'axios';
 import { useLocation, useParams } from 'react-router-dom';
+
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
       query: "(max-width:768px)"
@@ -39,26 +40,41 @@ export const Mobile = ({ children }) => {
 //   { id: 6, name: '버거원하우스 장충점' },
 //   { id: 7, name: '노브랜드버거 동국대점' },
   
-  
 // ];
-export default function Brand({ categoryName }) {
+export default function Brand(props) {
   const [brandList, setBrandList] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priorityMap, setPriorityMap] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
   const { category } = useParams();
-
+  const accessToken = localStorage.getItem('accessToken');
   //서버
   useEffect(() => {
     const categoryName = location.search.split('=')[1];
+    //const categoryName = localStorage.getItem("categoryName");
+    console.log(categoryName);
+    console.log('1');
     const fetchBrandList = async () => {
       try {
-        const response = await axios.get(`http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`);
-        if (response.data && response.data.brandNameList) {
-          setBrandList(response.data.brandNameList.map(brand => ({ name: brand.brandName })));
-          console.log(response.data)
+        const response = await axios.get(`http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`,
+        {
+          //withCredentials : true,
+           headers : {
+             //'Access-Control-Allow-Origin' : '*',
+             //'Access-Control-Allow-Methods' : 'GET, PUT, POST, DELETE, OPTIONS',
+             //'Access-Control-Allow-Headers' : 'Content-Type, Authorization, Content-Length, X-Request-With',
+             //'Access-Control-Allow-Credentials' : 'true',
+             Authorization : `Bearer ${accessToken}`
+           }
+         }
+        );
+        console.log('2');
+        if (response.data) {
+          setBrandList(response.data.brandNameList.map((brand, index) => ({ name: brand.brandName })));
+          console.log(setBrandList);
         }
+        console.log('3');
       } catch (error) {
         console.error('Error fetching brand list:', error);
       }

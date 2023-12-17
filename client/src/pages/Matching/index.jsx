@@ -75,7 +75,6 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
-background: #FF4256;
 `
 
 const MobileContainer = styled.div`

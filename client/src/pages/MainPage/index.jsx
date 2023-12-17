@@ -57,14 +57,21 @@ export default function MainPage() {
     { name: '술안주', image: Nightfood },
     
   ];
+  const accessToken = localStorage.getItem('accessToken');
+  console.log("In Main Page");
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
   const handleCategoryClick = async (categoryName, navigate) => {
     try {
       const response = await axios.get(
-        `http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`
+        `http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`,
+        {
+         withCredentials : true,
+          headers : {
+            Authorization : `Bearer ${accessToken}`
+          }
+        }
       );
-      console.log('서버 응답:', response.data);
-      const data = response.data;
+
       // 데이터를 직접 넘기는 대신, URL 파라미터로 넘깁니다.
       navigate(`/brand/list/all?category=${categoryName}`); 
     } catch (error) {
@@ -104,7 +111,7 @@ export default function MainPage() {
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
                       </Link> */}
-                       <NavLink to="/brand/list/all" onClick={() => handleCategoryClick(category.name, navigate)}>
+                       <NavLink to='/brand/list/all' onClick={() => handleCategoryClick(category.name, navigate)}>
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
                       </NavLink>
