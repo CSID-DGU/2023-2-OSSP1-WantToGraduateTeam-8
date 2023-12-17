@@ -18,13 +18,11 @@ export const AuthProvider = ({ children }) => {
     const login = (token) => {
         // 로그인 함수에서 토큰을 받아서 상태와 로컬스토리지에 저장
         setIsLoggedIn(true);
-        // localStorage.setItem('accessToken', token);
     };
 
     const logout = () => {
         // 로그아웃 시 상태와 로컬스토리지의 토큰 삭제
         setIsLoggedIn(false);
-        // localStorage.removeItem('accessToken');
     };
 
     return (

@@ -141,7 +141,6 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
-background: #FF4256;
 `
 
 const MobileContainer = styled.div`
@@ -188,7 +187,7 @@ const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top : 0.5rem;
+  margin-top : 1.5rem;
   p{
     color: #000;
   text-align: center;
@@ -211,9 +210,13 @@ const InputField = styled.input`
   height: 3.125rem;
   border-radius: 0.9375rem;
   border: 1px solid #7D7D7D;
+<<<<<<< HEAD
+  margin-bottom:0.5rem;
+=======
   margin-bottom:0.1rem;
   padding-left : 0.5rem;
   font-size : 1rem;
+>>>>>>> 3e3e60704ce51486df8869567d458e419396358b
   &:nth-child(2) {
     margin-bottom: 0.6rem;
   }

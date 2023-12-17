@@ -30,7 +30,8 @@ export default function Navbar() {
   const handleLogout = () => {
     logout(); // 로그아웃 함수 호출
     localStorage.removeItem('accessToken');
-    navigate('/'); // '/main' 페이지로 이동
+    navigate('/') // '/main' 페이지로 이동
+
   };
   return (
    <>
@@ -84,7 +85,7 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-`;
+`
 
 
 const MobileWrapper = styled.div`
@@ -95,26 +96,26 @@ width: 24.375rem;
 height: 9.375rem;
 flex-shrink: 0;
 background: #FF7062;
-`;
+`
 const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
-background: #FF4256;
-`;
+`
 
 
 const Header = styled.div`
   display: flex;
+
+  }
 `
 const Logo = styled.div`
 display : flex;
 margin-right : 9rem;
-margin-top : 0.45rem;
 width: 8.8125rem;
 height: 4.5625rem;
 
-`;
+`
 
 const LoginBox = styled.div`
   display: flex;
@@ -125,6 +126,7 @@ flex-direction: column;
 justify-content: center;
 margin-right : 1.5rem;
 flex-shrink: 0;
+
 
   align-items: center;
   a{
@@ -139,36 +141,37 @@ flex-shrink: 0;
   text-decoration-line : none;
 
   }
-`;
+`
 
 
 
 const SearchContainer = styled.div`
+
 display : flex;
 width : 100%;
-`;
+
+`
 const SearchWrapper = styled.div`
   display: flex;
   position : relative;
   width: 17rem;
-  margin-left : 1.625rem;
+  margin-left : 1rem;
   height: 3.0625rem;
   border-radius: 3.125rem;
   background: #FFF;
   flex-shrink: 0;
   }
-`;
+`
 const SearchBox = styled.input`
   display: flex;
   position: relative;
   width: 100%; 
   border: none;
   padding: 10px; 
-  padding-left : 1.25rem;
   height: 3.0625rem;
   border-radius: 3.125rem;
   box-sizing: border-box;
-  font-size : 1.0625rem;
+
 `;
 
 const ButtonWrapper = styled.div`
@@ -179,7 +182,7 @@ background: #FF7062;
 border : 2px solid white;
 border-radius : 100%;
 margin-left : 1rem;
-`;
+`
 const ButtonImg = styled.img`
 
 display: flex;
@@ -190,4 +193,4 @@ justify-content: center;
 align-items: center;
 flex-shrink: 0;
 
-`;
+`

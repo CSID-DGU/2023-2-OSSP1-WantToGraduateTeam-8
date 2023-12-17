@@ -54,12 +54,16 @@ export default function Brand(props) {
     const categoryName = location.search.split('=')[1];
     //const categoryName = localStorage.getItem("categoryName");
     console.log(categoryName);
-    console.log('1');
     const fetchBrandList = async () => {
       try {
         const response = await axios.get(`http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`,
         {
+          //withCredentials : true,
            headers : {
+             //'Access-Control-Allow-Origin' : '*',
+             //'Access-Control-Allow-Methods' : 'GET, PUT, POST, DELETE, OPTIONS',
+             //'Access-Control-Allow-Headers' : 'Content-Type, Authorization, Content-Length, X-Request-With',
+             //'Access-Control-Allow-Credentials' : 'true',
              Authorization : `Bearer ${accessToken}`
            }
          }
