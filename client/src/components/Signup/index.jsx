@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 export const Mobile = ({ children }) => {
@@ -27,39 +28,49 @@ export const Mobile = ({ children }) => {
 
 
 export default function Signup() {
-  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [studentId, setStudentId] = useState('');
   const [email, setEmail] = useState('');
+  const [account_number, setAccount_Number] = useState('');
   const [message, setMessage] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSignup = () => {
-    const usernameRegex = /^\S{4,}$/;
-    const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/;
-    const nameRegex = /^[^\d\s]+$/;
-    const studentIdRegex = /^\d{10}$/;    
 
-    if (!usernameRegex.test(username)) {
-      window.alert('아이디는 4자 이상이어야 합니다.');
+
+  const handleSignup = () => {
+    const nicknameRegex = /^\S{2,}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z0-9])[A-Za-z\d@$!%*?&]{4,}$/;
+    
+
+    if (!nicknameRegex.test(nickname)) {
+      window.alert('닉네임은 2자 이상이어야 합니다.');
     } else if (!passwordRegex.test(password)) {
       window.alert('비밀번호는 4자 이상의 문자 혹은 숫자를 포함해야 합니다.');
-    } else if (!nameRegex.test(name)) {
-      window.alert('이름은 공백이 없는 문자여야 합니다.');
-    } else if (!studentIdRegex.test(studentId)) {
-      window.alert('학번은 10자리 숫자여야 합니다.');
     } else if (!validateEmail(email)) {
       window.alert('올바른 이메일 형식이 아닙니다.');
     } else {
-      window.alert('회원가입이 완료되었습니다.');
-      // 서버로 회원가입 정보를 전송하고 처리하는 로직이 추가되어야 함.
-      // 회원가입 완료 후 로그인 창으로 이동
-      navigate('/login');
+      axios.post('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/user/join', {
+        nickname : nickname,  
+        email : email,
+        password : password,
+        account_number : account_number,
+    })
+    .then(res => {
+      if(res.data.nickname !== null){
+        navigate("/login");
+      }
+    })
+    .catch(err => {
+      alert('다시 회원가입해주시기 바랍니다.');
+    });
+    
+    alert("회원가입이 완료되었습니다.");
+    navigate("/login");
+
     }
 
-    const newMember = { username, password, name, studentId, email };
+    const newMember = { nickname, password, account_number, email };
   };
 
   return (
@@ -76,36 +87,31 @@ export default function Signup() {
         <SignupForm>
           <p>회원가입</p>
         <InputFieldRow>
-          <InputField
-            type="text"
-            placeholder="아이디 (4자 이상)"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <InputField
-            type="password"
-            placeholder="비밀번호 (문자 혹은 숫자를 포함한 4자 이상)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <InputField
-            type="text"
-            placeholder="이름 ex) 홍길동"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <InputField
-            type="text"
-            placeholder="학번 ex) 2019111111"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-          />
-          <InputField
-            type="email"
-            placeholder="이메일 ex)email@naver.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <InputField
+        type="text"
+        placeholder="닉네임"
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
+      />
+      <InputField
+        type="email"
+        placeholder="이메일 ex)email@naver.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <InputField
+        type="password"
+        placeholder="비밀번호 (문자 혹은 숫자를 포함한 4자 이상)"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <InputField
+        type="text"
+        placeholder="계좌번호(-포함)"
+        value={account_number}
+        onChange={(e) => setAccount_Number(e.target.value)}
+      />
+          
         </InputFieldRow>
         <SignupButton onClick={handleSignup}>
           <p>가입하기</p>
@@ -133,7 +139,6 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
-background: #FF4256;
 `
 
 const MobileContainer = styled.div`
@@ -180,7 +185,7 @@ const SignupForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top : 0.5rem;
+  margin-top : 1.5rem;
   p{
     color: #000;
   text-align: center;
@@ -199,11 +204,17 @@ const InputFieldRow = styled.div`
 `;
 
 const InputField = styled.input`
-  width: 18.75rem;
+  width: 18.25rem;
   height: 3.125rem;
   border-radius: 0.9375rem;
   border: 1px solid #7D7D7D;
+<<<<<<< HEAD
+  margin-bottom:0.5rem;
+=======
   margin-bottom:0.1rem;
+  padding-left : 0.5rem;
+  font-size : 1rem;
+>>>>>>> 3e3e60704ce51486df8869567d458e419396358b
   &:nth-child(2) {
     margin-bottom: 0.6rem;
   }

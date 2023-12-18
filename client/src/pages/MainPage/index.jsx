@@ -16,6 +16,8 @@ import Fastfood from '../../assets/imgs/Hamburger.png'
 import Bunsik from '../../assets/imgs/Bunsik.png'
 import Nightfood from '../../assets/imgs/NightFood.png'
 import Toggle from '../../components/Toggle/index'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({
@@ -40,6 +42,7 @@ export const Mobile = ({ children }) => {
   }
 
 export default function MainPage() {
+  const navigate = useNavigate();
   const categories = [
     { name: '카페', image: Cafe },
     { name: '양식', image: Pizza },
@@ -54,31 +57,27 @@ export default function MainPage() {
     { name: '술안주', image: Nightfood },
     
   ];
+  const accessToken = localStorage.getItem('accessToken');
   //카페 / 양식 / 중식 / 베이커리 /( 닭/오리요리) / (일식/수산물) / 한식 / 퓨전요리 / 패스트푸드 / 분식 / 술안주
-  const handleCategoryClick = async (categoryName) => {
+  const handleCategoryClick = async (categoryName, navigate) => {
     try {
-      // 서버에 요청을 보낼 준비 (axios 또는 fetch 등을 사용하여 API 요청)
-      const response = await fetch('https://example.com/api/categories', {
-        method: 'POST', // POST 방식으로 데이터 전송
-        headers: {
-          'Content-Type': 'application/json', // 전송할 데이터의 타입 설정
-        },
-        body: JSON.stringify({ category: categoryName }), // 카테고리 이름을 JSON 형식으로 변환하여 전송
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-  
-      // 서버로부터 응답 받은 데이터 처리
-      const data = await response.json();
-      // data를 Categories 컴포넌트로 전달하여 해당 카테고리의 음식점 리스트를 업데이트
-      // 여기서 data를 Categories 컴포넌트로 전달하거나 상태를 업데이트하는 등의 작업을 할 수 있다.
+      const response = await axios.get(
+        `http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`,
+        {
+         withCredentials : true,
+          headers : {
+            Authorization : `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      // 데이터를 직접 넘기는 대신, URL 파라미터로 넘깁니다.
+      navigate(`/brand/list/all?category=${categoryName}`); 
     } catch (error) {
       console.error('Error:', error.message);
     }
   };
-  
+
   return (
    <>
         <Mobile>
@@ -93,10 +92,10 @@ export default function MainPage() {
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
                       </Link> */}
-                       <Link to="/brand" onClick={() => handleCategoryClick(category.name)}>
+                       <NavLink to='/brand/list/all' onClick={() => handleCategoryClick(category.name, navigate)}>
                         <b>{category.name}</b>
                         <img src={category.image} alt={category.name} />
-                      </Link>   
+                      </NavLink>
                       {/* -> api연결 할때 코드 */}
                     </Menu>
                   ))}

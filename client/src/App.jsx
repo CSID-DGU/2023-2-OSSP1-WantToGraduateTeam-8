@@ -12,6 +12,8 @@ import Signup from './components/Signup/index';
 import Chatting from './pages/Chatting/index.';
 import Mypage from './components/Mypage/index';
 import Review from './components/Review';
+import axios from '../src/axiosConfig'; 
+import Chat from './pages/Chatting/chat';
 
 export default function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -28,12 +30,15 @@ export default function App() {
           </>
         )}
         <Route path="/main" element={<MainPage />} />
-        <Route path="/brand" element={<Brand />} />
+        <Route path="/brand/list/all" element={<Brand />} />
         <Route path="/matching" element={<Matching />} />
         <Route path="/chatting" element={<Chatting />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/review" element={<Review/>}/>
+        <Route path="/chat/main" element={<Chat/>}/>
       </Routes>
     </>
   );
 }
+
+
