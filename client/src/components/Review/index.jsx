@@ -64,7 +64,7 @@ export default function Review() {
       );
       
       alert('리뷰 작성이 완료되었습니다.');
-      navigate('/mypage');
+      navigate('/main');
       console.log('서버로 전송할 데이터:', dataToSend);
     } catch(error) {
       console.error("Error : ", error.message);
