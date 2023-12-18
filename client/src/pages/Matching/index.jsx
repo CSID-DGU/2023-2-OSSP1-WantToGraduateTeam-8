@@ -1,7 +1,8 @@
+//Matching.jsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { useMediaQuery } from "react-responsive"
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../../assets/imgs/MatchingSpin.gif';
 import Toggle from '../../components/Toggle';
@@ -22,45 +23,62 @@ export const Mobile = ({ children }) => {
   }
 
   export default function Matching() {
-    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-  
+    const navigate = useNavigate();
+    const [htmlContent, setHtmlContent] = useState('');
     useEffect(() => {
       const accessToken = localStorage.getItem('accessToken');
-      let count = 0; // 요청 횟수를 저장하는 변수
+      let count = 0;
   
       const interval = setInterval(async () => {
+        
         try {
           count++;
-          if (count > 10) {
+          if (count > 1) {
             clearInterval(interval);
-            setIsLoading(false); // 로딩 상태 해제
+            setIsLoading(false);
             return;
           }
+          const htmlResponse = await axios.get('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/chat/main', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        
+        setHtmlContent(htmlResponse.data); 
   
-          const response = await axios.get('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/status/flag', {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
+          const response = await axios.get(
+            'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/run/status/flag',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
           const { flag } = response.data;
           console.log(response.data);
           if (flag) {
-            navigate('/chat/main');
             clearInterval(interval);
+            // flag가 true일 때 '/chat/main'으로 GET 요청을 보냄
+            const htmlResponse = await axios.get('http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/chat/main', {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            setHtmlContent(htmlResponse.data); // 받은 HTML을 상태에 저장하여 렌더링할 준비
           } else {
             setIsLoading(true);
           }
         } catch (error) {
           console.error('API 호출 오류:', error);
         }
-      }, 3000); // 3초마다 실행
+      }, 3000);
   
       return () => clearInterval(interval);
-    }, [navigate]);
+    }, []);
   
     const handleChattingClick = () => {
-      navigate('/main');
+      navigate('/chatting');
     };
   
     return (
@@ -78,8 +96,8 @@ export const Mobile = ({ children }) => {
                 {!isLoading && (
                 <>
                   <MiddleLogo>Share,<br/> Delicious</MiddleLogo>
-                  <p>매칭이 실패하였습니다..</p>
-                  <Button onClick={handleChattingClick}>음식점 다시 선택하기</Button>
+                  <p>매칭에 성공하였습니다!</p>
+                  <Button onClick={handleChattingClick}>채팅하러 가기</Button>
                 </>
               )}
             </MatchingContainer>

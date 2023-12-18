@@ -11,6 +11,7 @@ import Stars from '../../assets/imgs/ProfileStars.png'
 import Toggle from '../Toggle';
 import RateStar from '../RateStar/RateStar';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const Mobile = ({ children }) => {
   const isMobile = useMediaQuery({
@@ -29,29 +30,47 @@ export default function Review() {
 
   const [comment, setComment] = useState('');
   const navigate = useNavigate();
-  const [partnerNames, setPartnerNames] = useState(['User1', 'User2']); // 임시로 닉네임 정의
+  const [partnerNames, setPartnerNames] = useState(['User2', 'User3']); // 임시로 닉네임 정의
   const [partnerReviews, setPartnerReviews] = useState(['', '']); // 상대방 리뷰
   const [starCounts, setStarCounts] = useState([0, 0]); // 각 사용자의 별점
 
-  const handleSubmit = () => {
-    alert('리뷰 작성이 완료되었습니다.');
-    navigate('/mypage');
+  const accessToken = localStorage.getItem('accessToken');
+  const handleSubmit = async () => {
+    try{
+      const dataToSend = 
+        {
+          nickname_1: partnerNames[0],
+          grade_1: starCounts[0],
+          comment_1: partnerReviews[0],
+          nickname_2: partnerNames[1],
+          grade_2: starCounts[1],
+          comment_2: partnerReviews[1],
+        };
 
-    const dataToSend = [
+      const response = await axios.post(`http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/matching/review`,
       {
-        nickname: partnerNames[0],
-        grade: starCounts[0],
-        comment: partnerReviews[0],
+        nickname_1: partnerNames[0],
+        grade_1: starCounts[0],
+        comment_1: partnerReviews[0],
+        nickname_2: partnerNames[1],
+        grade_2: starCounts[1],
+        comment_2: partnerReviews[1],
       },
-      {
-        nickname: partnerNames[1],
-        grade: starCounts[1],
-        comment: partnerReviews[1],
-      }
-    ];
-    console.log('서버로 전송할 데이터:', dataToSend);
-    
+        {
+          headers : {
+            Authorization : `Bearer ${accessToken}`
+          }
+        }
+      );
+      
+      alert('리뷰 작성이 완료되었습니다.');
+      navigate('/mypage');
+      console.log('서버로 전송할 데이터:', dataToSend);
+    } catch(error) {
+      console.error("Error : ", error.message);
+    }
   };
+
   const receiveStarCount = (count, index) => {
     const updatedStarCounts = [...starCounts];
     updatedStarCounts[index] = count;
@@ -118,6 +137,7 @@ const PcWrapper = styled.div`
 width: 1920px;
 height: 305px;
 flex-shrink: 0;
+background: #FF4256;
 `
 
 const ReviewDiv = styled.div`

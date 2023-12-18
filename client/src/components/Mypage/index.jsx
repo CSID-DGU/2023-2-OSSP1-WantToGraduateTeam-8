@@ -84,7 +84,7 @@ export default function Mypage() {
         </ProfileImg>
         <ProfileNick>{userData.nickname}</ProfileNick>
         <ReviewStar>
-          <StarRating grade={userData.grade} />
+          <StarRating grade={5} />
         </ReviewStar>
         <ProfileAccnt> 계좌번호: {userData.account_number}</ProfileAccnt>
       </ProfileInfoDiv>

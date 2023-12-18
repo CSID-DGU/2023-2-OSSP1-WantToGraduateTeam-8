@@ -77,25 +77,7 @@ export default function MainPage() {
       console.error('Error:', error.message);
     }
   };
-  // const testServerRequest = async () => {
-  //   // 카테고리 이름 설정 (원하는 이름으로 변경 가능)
-  //   const categoryName = '카페';
-  
-  //   try {
-  //     // 서버에 categoryName을 전달하여 데이터 요청
-  //     const response = await axios.get(
-  //       `http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/brand/list/all?category=${categoryName}`
-  //     );
-  
-  //     // 받아온 데이터 출력
-  //     console.log('서버 응답:', response.data);
-  //   } catch (error) {
-  //     console.error('에러발생!:', error.message);
-  //   }
-  // };
-  
-  // // 테스트 함수 호출
-  // testServerRequest();
+
   return (
    <>
         <Mobile>
