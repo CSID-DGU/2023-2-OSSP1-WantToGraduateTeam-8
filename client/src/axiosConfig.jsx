@@ -4,7 +4,6 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: 'http://ec2-13-125-45-64.ap-northeast-2.compute.amazonaws.com:8080/',
-  // 다른 설정들을 여기에 추가할 수 있습니다.
 });
 
 export const setInterceptor = (token) => {

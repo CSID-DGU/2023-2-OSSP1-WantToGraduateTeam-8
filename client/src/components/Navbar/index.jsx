@@ -54,7 +54,7 @@ export default function Navbar() {
             </LoginBox>
             
             </Header>
-            <SearchContainer>
+            {/* <SearchContainer>
               <SearchWrapper >
               <SearchBox className="textbox" type="text" placeholder="검색어 입력"></SearchBox>
               </SearchWrapper>
@@ -65,7 +65,7 @@ export default function Navbar() {
             </ButtonWrapper>
               </Link>
            
-            </SearchContainer>
+            </SearchContainer> */}
             </MobileWrapper>
           </MobileContainer>
 
@@ -93,7 +93,7 @@ display : flex;
 flex-direction : column;
 align-items : center;
 width: 24.375rem;
-height: 9.375rem;
+height: 6rem;
 flex-shrink: 0;
 background: #FF7062;
 `
